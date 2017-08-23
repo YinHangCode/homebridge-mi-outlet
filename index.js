@@ -1,6 +1,5 @@
 require('./Devices/PlugBase');
 // require('./Devices/IntelligencePinboard');
-// require('./Devices/Intelligence6Pinboard');
 // require('./Devices/QingPinboard');
 
 var Accessory, Service, Characteristic, UUIDGen;
