@@ -1,0 +1,21 @@
+{
+  "name": "homebridge-mi-outlet",
+  "version": "0.0.3",
+  "description": "XiaoMi outlet plugins for HomeBridge(https://github.com/nfarina/homebridge).",
+  "keywords": [
+    "homebridge-plugin"
+  ],
+  "author": "YinHang",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YinHangCode/homebridge-mi-outlet"
+  },
+  "bugs": {
+    "url": "https://github.com/YinHangCode/homebridge-mi-outlet/issues"
+  },
+  "engines": {
+    "node": ">=0.12.0",
+    "homebridge": ">=0.4.1"
+  }
+}
