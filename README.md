@@ -18,16 +18,16 @@ npm install -g miio homebridge-mi-outlet
 ## Configuration
 ```
 "platforms": [{
-	"platform": "MiOutlet",
-	"accessories": [{
-		"type": "PlugBase",
-		"ip": "192.168.88.xx",
-		"token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-		"outletName": "living room outlet",
-		"outletDisable": false,
-		"temperatureName": "living room outlet temperature",
-		"temperatureDisable": false
-	}]
+    "platform": "MiOutlet",
+    "accessories": [{
+        "type": "PlugBase",
+        "ip": "192.168.88.xx",
+        "token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "outletName": "living room outlet",
+        "outletDisable": false,
+        "temperatureName": "living room outlet temperature",
+        "temperatureDisable": false
+    }]
 }]
 ```
 ## Get token
