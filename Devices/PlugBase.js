@@ -28,7 +28,7 @@ PlugBase = function(platform, config) {
     if(!this.config['temperatureDisable'] && this.config['temperatureName'] && this.config['temperatureName'] != "") {
         this.accessories['temperatureAccessory'] = new PlugBaseTemperature();
     }
-	if(!this.config['switchLEDDisable'] && this.config['switchLEDName'] && this.config['switchLEDName'] != "") {
+    if(!this.config['switchLEDDisable'] && this.config['switchLEDName'] && this.config['switchLEDName'] != "") {
         this.accessories['switchLEDAccessory'] = new PlugBaseSwitchLED();
     }
     
@@ -63,6 +63,7 @@ PlugBaseOutlet.prototype.getServices = function() {
 PlugBaseOutlet.prototype.getPower = function(callback) {
     device.call("get_prop", ["power"])
         .then(result => {
+            deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - Outlet - getPower: " + result);
             callback(null, result[0] === 'on' ? 1 : 0);
         });
 }
@@ -103,6 +104,7 @@ PlugBaseTemperature.prototype.getServices = function() {
 PlugBaseTemperature.prototype.getTemperature = function(callback) {
     device.call("get_prop", ["temperature"])
         .then(result => {
+            deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - Temperature - getTemperature: " + result);
             callback(null, result[0]);
         });
 }
@@ -134,6 +136,7 @@ PlugBaseSwitchLED.prototype.getServices = function() {
 PlugBaseSwitchLED.prototype.getLEDPower = function(callback) {
     device.call("get_prop", ["wifi_led"])
         .then(result => {
+            deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - SwitchLED - getLEDPower: " + result);
             callback(null, result[0] === 'on' ? 1 : 0);
         });
 }

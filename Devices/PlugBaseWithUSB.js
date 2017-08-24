@@ -63,6 +63,7 @@ PlugBaseWithUSBOutlet.prototype.getServices = function() {
 PlugBaseWithUSBOutlet.prototype.getPower = function(callback) {
     device.call("get_prop", ["on"])
         .then(result => {
+            deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBaseWithUSB - Outlet - getPower: " + result);
             callback(null, result[0]);
         });
 }
@@ -103,6 +104,7 @@ PlugBaseWithUSBTemperature.prototype.getServices = function() {
 PlugBaseWithUSBTemperature.prototype.getTemperature = function(callback) {
     device.call("get_prop", ["temperature"])
         .then(result => {
+            deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBaseWithUSB - Temperature - getTemperature: " + result);
             callback(null, result[0]);
         });
 }
@@ -134,6 +136,7 @@ PlugBaseWithUSBSwitchUSB.prototype.getServices = function() {
 PlugBaseWithUSBSwitchUSB.prototype.getUSBPower = function(callback) {
     device.call("get_prop", ["usb_on"])
         .then(result => {
+            deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBaseWithUSB - SwitchUSB - getUSBPower: " + result);
             callback(null, result[0]);
         });
 }

@@ -34,8 +34,8 @@ function MiOutletPlatform(log, config, api) {
     if (api) {
         this.api = api;
     }
-	
-	this.log.info("[MiOutletPlatform][INFO]**************************************************************");
+    
+    this.log.info("[MiOutletPlatform][INFO]**************************************************************");
     this.log.info("[MiOutletPlatform][INFO]          MiOutletPlatform v%s By YinHang", packageFile.version);
     this.log.info("[MiOutletPlatform][INFO]  GitHub: https://github.com/YinHangCode/homebridge-mi-outlet ");
     this.log.info("[MiOutletPlatform][INFO]                                         QQ Group: 107927710  ");

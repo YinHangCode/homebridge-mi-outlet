@@ -38,18 +38,18 @@ npm install -g miio homebridge-mi-outlet
         "outletDisable": false,
         "temperatureName": "living room outlet temperature",
         "temperatureDisable": false,
-		"switchLEDName": "living room led light switch",
-		"switchLEDDisable": false
+        "switchLEDName": "living room led light switch",
+        "switchLEDDisable": false
     }, {
         "type": "PlugBaseWithUSB",
         "ip": "192.168.88.xx",
         "token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-        "outletName": "living room outlet",
+        "outletName": "study room outlet",
         "outletDisable": false,
-        "temperatureName": "living room outlet temperature",
+        "temperatureName": "study room outlet temperature",
         "temperatureDisable": false,
-		"switchUSBName": "living room led usb switch",
-		"switchUSBDisable": false
+        "switchUSBName": "study room led usb switch",
+        "switchUSBDisable": false
     }]
 }]
 ```
@@ -69,6 +69,7 @@ Support: Unknown
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx is token.
 ## Version Logs
 ### 0.1.0
-
+1.add support for PlugBaseWithUSB: outlet, temperature sensor, USB switch.   
+2.add PlugBase LED switch.    
 ### 0.0.1
 1.support for PlugBase: outlet, temperature sensor.   
