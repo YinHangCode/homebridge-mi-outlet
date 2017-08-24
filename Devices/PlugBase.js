@@ -22,11 +22,14 @@ PlugBase = function(platform, config) {
     });
     
     this.accessories = {};
-    if(!this.config['outletDisable']) {
+    if(!this.config['outletDisable'] && this.config['outletName'] && this.config['outletName'] != "") {
         this.accessories['outletAccessory'] = new PlugBaseOutlet();
     }
-    if(!this.config['temperatureDisable']) {
+    if(!this.config['temperatureDisable'] && this.config['temperatureName'] && this.config['temperatureName'] != "") {
         this.accessories['temperatureAccessory'] = new PlugBaseTemperature();
+    }
+	if(!this.config['switchLEDDisable'] && this.config['switchLEDName'] && this.config['switchLEDName'] != "") {
+        this.accessories['switchLEDAccessory'] = new PlugBaseSwitchLED();
     }
     
     return this.obj2array(this.accessories);
@@ -102,4 +105,45 @@ PlugBaseTemperature.prototype.getTemperature = function(callback) {
         .then(result => {
             callback(null, result[0]);
         });
+}
+
+PlugBaseSwitchLED = function() {
+    this.name = deviceThis.config['switchLEDName'];
+}
+
+PlugBaseSwitchLED.prototype.getServices = function() {
+    var services = [];
+
+    var infoService = new Service.AccessoryInformation();
+    infoService
+        .setCharacteristic(Characteristic.Manufacturer, "XiaoMi")
+        .setCharacteristic(Characteristic.Model, "Plug Base")
+        .setCharacteristic(Characteristic.SerialNumber, "Undefined");
+    services.push(infoService);
+    
+    var switchLEDService = new Service.Lightbulb(this.name);
+    switchLEDService
+        .getCharacteristic(Characteristic.On)
+        .on('get', this.getLEDPower.bind(this))
+        .on('set', this.setLEDPower.bind(this));
+    services.push(switchLEDService);
+
+    return services;
+}
+
+PlugBaseSwitchLED.prototype.getLEDPower = function(callback) {
+    device.call("get_prop", ["wifi_led"])
+        .then(result => {
+            callback(null, result[0] === 'on' ? 1 : 0);
+        });
+}
+
+PlugBaseSwitchLED.prototype.setLEDPower = function(value, callback) {
+    if(value) {
+        device.call("set_wifi_led", ['on']);
+    } else {
+        device.call("set_wifi_led", ['off']);
+    }
+    
+    callback(null);    
 }

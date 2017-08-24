@@ -22,13 +22,13 @@ PlugBaseWithUSB = function(platform, config) {
     });
     
     this.accessories = {};
-    if(!this.config['outletDisable']) {
+    if(!this.config['outletDisable'] && this.config['outletName'] && this.config['outletName'] != "") {
         this.accessories['outletAccessory'] = new PlugBaseWithUSBOutlet();
     }
-    if(!this.config['temperatureDisable']) {
+    if(!this.config['temperatureDisable'] && this.config['temperatureName'] && this.config['temperatureName'] != "") {
         this.accessories['temperatureAccessory'] = new PlugBaseWithUSBTemperature();
     }
-    if(!this.config['switchUSBDisable']) {
+    if(!this.config['switchUSBDisable'] && this.config['switchUSBName'] && this.config['switchUSBName'] != "") {
         this.accessories['switchUSBAccessory'] = new PlugBaseWithUSBSwitchUSB();
     }
     

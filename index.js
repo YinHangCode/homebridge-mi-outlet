@@ -1,7 +1,10 @@
 require('./Devices/PlugBase');
-// require('./Devices/IntelligencePinboard');
-// require('./Devices/QingPinboard');
+require('./Devices/PlugBaseWithUSB');
+//require('./Devices/IntelligencePinboard');
+//require('./Devices/QingPinboard');
+//require('./Devices/QingPinboardWithUSB');
 
+var packageFile = require("./package.json");
 var Accessory, Service, Characteristic, UUIDGen;
 
 module.exports = function(homebridge) {
@@ -11,10 +14,10 @@ module.exports = function(homebridge) {
     Characteristic = homebridge.hap.Characteristic;
     UUIDGen = homebridge.hap.uuid;
 
-    homebridge.registerPlatform('homebridge-mi-outlet', 'MiOutlet', MiOutlet);
+    homebridge.registerPlatform('homebridge-mi-outlet', 'MiOutletPlatform', MiOutletPlatform);
 }
 
-function MiOutlet(log, config, api) {
+function MiOutletPlatform(log, config, api) {
     if(null == config) {
         return;
     }
@@ -31,9 +34,16 @@ function MiOutlet(log, config, api) {
     if (api) {
         this.api = api;
     }
+	
+	this.log.info("[MiOutletPlatform][INFO]**************************************************************");
+    this.log.info("[MiOutletPlatform][INFO]          MiOutletPlatform v%s By YinHang", packageFile.version);
+    this.log.info("[MiOutletPlatform][INFO]  GitHub: https://github.com/YinHangCode/homebridge-mi-outlet ");
+    this.log.info("[MiOutletPlatform][INFO]                                         QQ Group: 107927710  ");
+    this.log.info("[MiOutletPlatform][INFO]**************************************************************");
+    this.log.info("[MiOutletPlatform][INFO]start success...");
 }
 
-MiOutlet.prototype = {
+MiOutletPlatform.prototype = {
     accessories: function(callback) {
         var myAccessories = [];
 
@@ -46,6 +56,10 @@ MiOutlet.prototype = {
             var cfgAccessory = cfgAccessories[i];
             if (cfgAccessory['type'] == "PlugBase") {
                 new PlugBase(this, cfgAccessory).forEach(function(accessory, index, arr){
+                    myAccessories.push(accessory);
+                });
+            } else if (cfgAccessory['type'] == "PlugBaseWithUSB") {
+                new PlugBaseWithUSB(this, cfgAccessory).forEach(function(accessory, index, arr){
                     myAccessories.push(accessory);
                 });
             } else if (cfgAccessory['type'] == "IntelligencePinboard") {
