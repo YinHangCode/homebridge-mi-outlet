@@ -4,11 +4,13 @@
 XiaoMi outlet plugins for HomeBridge.   
 Thanks for [nfarina](https://github.com/nfarina)(the author of [homebridge](https://github.com/nfarina/homebridge)), [wfr](https://github.com/wfr)(the author of [mihome-binary-protocol](https://github.com/OpenMiHome/mihome-binary-protocol)), [aholstenson](https://github.com/aholstenson)(the author of [miio](https://github.com/aholstenson/miio)), all other developer and testers.   
 
+**Note: I have only a part of these devices, so some devices don't have tested. If you find bugs, please submit them to [issues](https://github.com/YinHangCode/homebridge-mi-outlet/issues) or [QQ Group: 107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d).**   
+
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-outlet/master/images/PlugBase.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-outlet/master/images/PlugBaseWithUSB.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-outlet/blob/master/images/IntelligencePinboard.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-outlet/blob/master/images/QingPinboard.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-outlet/blob/master/images/QingPinboardWithUSB.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-outlet/master/images/IntelligencePinboard.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-outlet/master/images/QingPinboard.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-outlet/master/images/QingPinboardWithUSB.jpg)
 
 ## Supported Devices
 1.PlugBase(米家智能插座基础版)   
