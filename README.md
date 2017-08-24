@@ -14,7 +14,7 @@ Thanks for [nfarina](https://github.com/nfarina)(the author of [homebridge](http
 
 ## Supported Devices
 1.PlugBase(米家智能插座基础版)   
-2.PlugBaseWithUSB(小米智能插座_USB版) ---- coming soon   
+2.PlugBaseWithUSB(小米智能插座_USB版)   
 3.IntelligencePinboard(米家智能插线板) ---- coming soon   
 4.QingPinboard(青米智能插线板_五孔位版) ---- coming soon   
 5.QingPinboardWithUSB(青米智能插线板_USB版) ---- coming soon   
