@@ -61,11 +61,13 @@ PlugBaseOutlet.prototype.getServices = function() {
 }
 
 PlugBaseOutlet.prototype.getPower = function(callback) {
-    device.call("get_prop", ["power"])
-        .then(result => {
-            deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - Outlet - getPower: " + result);
-            callback(null, result[0] === 'on' ? 1 : 0);
-        });
+    device.call("get_prop", ["power"]).then(result => {
+        deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - Outlet - getPower: " + result);
+        callback(null, result[0] === 'on' ? 1 : 0);
+    }).catch(function(err) {
+        deviceThis.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - Outlet - getPower Error: " + err);
+        callback(true);
+    });
 }
 
 PlugBaseOutlet.prototype.setPower = function(value, callback) {
@@ -102,11 +104,13 @@ PlugBaseTemperature.prototype.getServices = function() {
 }
 
 PlugBaseTemperature.prototype.getTemperature = function(callback) {
-    device.call("get_prop", ["temperature"])
-        .then(result => {
-            deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - Temperature - getTemperature: " + result);
-            callback(null, result[0]);
-        });
+    device.call("get_prop", ["temperature"]).then(result => {
+        deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - Temperature - getTemperature: " + result);
+        callback(null, result[0]);
+    }).catch(function(err) {
+        deviceThis.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - Temperature - getTemperature Error: " + err);
+        callback(true);
+    });
 }
 
 PlugBaseSwitchLED = function() {
@@ -134,11 +138,13 @@ PlugBaseSwitchLED.prototype.getServices = function() {
 }
 
 PlugBaseSwitchLED.prototype.getLEDPower = function(callback) {
-    device.call("get_prop", ["wifi_led"])
-        .then(result => {
-            deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - SwitchLED - getLEDPower: " + result);
-            callback(null, result[0] === 'on' ? 1 : 0);
-        });
+    device.call("get_prop", ["wifi_led"]).then(result => {
+        deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - SwitchLED - getLEDPower: " + result);
+        callback(null, result[0] === 'on' ? 1 : 0);
+    }).catch(function(err) {
+        deviceThis.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - SwitchLED - getLEDPower Error: " + err);
+        callback(true);
+    });
 }
 
 PlugBaseSwitchLED.prototype.setLEDPower = function(value, callback) {

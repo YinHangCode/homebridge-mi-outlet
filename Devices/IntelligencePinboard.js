@@ -6,7 +6,7 @@ const miio = require('miio');
 var Accessory, PlatformAccessory, Service, Characteristic, UUIDGen;
 var deviceThis, device;
 
-PlugBaseWithUSB = function(platform, config) {
+IntelligencePinboard = function(platform, config) {
     this.init(platform, config);
     
     Accessory = platform.Accessory;
@@ -23,30 +23,30 @@ PlugBaseWithUSB = function(platform, config) {
     
     this.accessories = {};
     if(!this.config['outletDisable'] && this.config['outletName'] && this.config['outletName'] != "") {
-        this.accessories['outletAccessory'] = new PlugBaseWithUSBOutlet();
+        this.accessories['outletAccessory'] = new IntelligencePinboardOutlet();
     }
     if(!this.config['temperatureDisable'] && this.config['temperatureName'] && this.config['temperatureName'] != "") {
-        this.accessories['temperatureAccessory'] = new PlugBaseWithUSBTemperature();
+        this.accessories['temperatureAccessory'] = new IntelligencePinboardTemperature();
     }
-    if(!this.config['switchUSBDisable'] && this.config['switchUSBName'] && this.config['switchUSBName'] != "") {
-        this.accessories['switchUSBAccessory'] = new PlugBaseWithUSBSwitchUSB();
+    if(!this.config['switchLEDDisable'] && this.config['switchLEDName'] && this.config['switchLEDName'] != "") {
+        this.accessories['switchLEDAccessory'] = new IntelligencePinboardSwitchLED();
     }
     
     return this.obj2array(this.accessories);
 }
-inherits(PlugBaseWithUSB, Base);
+inherits(IntelligencePinboard, Base);
 
-PlugBaseWithUSBOutlet = function() {
+IntelligencePinboardOutlet = function() {
     this.name = deviceThis.config['outletName'];
 }
 
-PlugBaseWithUSBOutlet.prototype.getServices = function() {
+IntelligencePinboardOutlet.prototype.getServices = function() {
     var services = [];
 
     var infoService = new Service.AccessoryInformation();
     infoService
         .setCharacteristic(Characteristic.Manufacturer, "XiaoMi")
-        .setCharacteristic(Characteristic.Model, "Plug Base With USB")
+        .setCharacteristic(Characteristic.Model, "Intelligence Pinboard")
         .setCharacteristic(Characteristic.SerialNumber, "Undefined");
     services.push(infoService);
     
@@ -60,37 +60,37 @@ PlugBaseWithUSBOutlet.prototype.getServices = function() {
     return services;
 }
 
-PlugBaseWithUSBOutlet.prototype.getPower = function(callback) {
-    device.call("get_prop", ["on"]).then(result => {
-        deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBaseWithUSB - Outlet - getPower: " + result);
-        callback(null, result[0]);
+IntelligencePinboardOutlet.prototype.getPower = function(callback) {
+    device.call("get_prop", ["power"]).then(result => {
+        deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]IntelligencePinboard - Outlet - getPower: " + result);
+        callback(null, result[0] === 'on' ? 1 : 0);
     }).catch(function(err) {
-        deviceThis.platform.log.error("[MiOutletPlatform][ERROR]PlugBaseWithUSB - Outlet - getPower Error: " + err);
+        deviceThis.platform.log.error("[MiOutletPlatform][ERROR]IntelligencePinboard - Outlet - getPower Error: " + err);
         callback(true);
     });
 }
 
-PlugBaseWithUSBOutlet.prototype.setPower = function(value, callback) {
+IntelligencePinboardOutlet.prototype.setPower = function(value, callback) {
     if(value) {
-        device.call("set_on", []);
+        device.call("set_power", ['on']);
     } else {
-        device.call("set_off", []);
+        device.call("set_power", ['off']);
     }
     
     callback(null);    
 }
 
-PlugBaseWithUSBTemperature = function() {
+IntelligencePinboardTemperature = function() {
     this.name = deviceThis.config['temperatureName'];
 }
 
-PlugBaseWithUSBTemperature.prototype.getServices = function() {
+IntelligencePinboardTemperature.prototype.getServices = function() {
     var services = [];
 
     var infoService = new Service.AccessoryInformation();
     infoService
         .setCharacteristic(Characteristic.Manufacturer, "XiaoMi")
-        .setCharacteristic(Characteristic.Model, "Plug Base With USB")
+        .setCharacteristic(Characteristic.Model, "Intelligence Pinboard")
         .setCharacteristic(Characteristic.SerialNumber, "Undefined");
     services.push(infoService);
     
@@ -103,55 +103,55 @@ PlugBaseWithUSBTemperature.prototype.getServices = function() {
     return services;
 }
 
-PlugBaseWithUSBTemperature.prototype.getTemperature = function(callback) {
+IntelligencePinboardTemperature.prototype.getTemperature = function(callback) {
     device.call("get_prop", ["temperature"]).then(result => {
-        deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBaseWithUSB - Temperature - getTemperature: " + result);
+        deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]IntelligencePinboard - Temperature - getTemperature: " + result);
         callback(null, result[0]);
     }).catch(function(err) {
-        deviceThis.platform.log.error("[MiOutletPlatform][ERROR]PlugBaseWithUSB - Temperature - getTemperature Error: " + err);
+        deviceThis.platform.log.error("[MiOutletPlatform][ERROR]IntelligencePinboard - Temperature - getTemperature Error: " + err);
         callback(true);
     });
 }
 
-PlugBaseWithUSBSwitchUSB = function() {
-    this.name = deviceThis.config['switchUSBName'];
+IntelligencePinboardSwitchLED = function() {
+    this.name = deviceThis.config['switchLEDName'];
 }
 
-PlugBaseWithUSBSwitchUSB.prototype.getServices = function() {
+IntelligencePinboardSwitchLED.prototype.getServices = function() {
     var services = [];
 
     var infoService = new Service.AccessoryInformation();
     infoService
         .setCharacteristic(Characteristic.Manufacturer, "XiaoMi")
-        .setCharacteristic(Characteristic.Model, "Plug Base With USB")
+        .setCharacteristic(Characteristic.Model, "Intelligence Pinboard")
         .setCharacteristic(Characteristic.SerialNumber, "Undefined");
     services.push(infoService);
     
-    var switchService = new Service.Switch(this.name);
-    switchService
+    var switchLEDService = new Service.Lightbulb(this.name);
+    switchLEDService
         .getCharacteristic(Characteristic.On)
-        .on('get', this.getUSBPower.bind(this))
-        .on('set', this.setUSBPower.bind(this));
-    services.push(switchService);
+        .on('get', this.getLEDPower.bind(this))
+        .on('set', this.setLEDPower.bind(this));
+    services.push(switchLEDService);
 
     return services;
 }
 
-PlugBaseWithUSBSwitchUSB.prototype.getUSBPower = function(callback) {
-    device.call("get_prop", ["usb_on"]).then(result => {
-        deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBaseWithUSB - SwitchUSB - getUSBPower: " + result);
-        callback(null, result[0]);
+IntelligencePinboardSwitchLED.prototype.getLEDPower = function(callback) {
+    device.call("get_prop", ["wifi_led"]).then(result => {
+        deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]IntelligencePinboard - SwitchLED - getLEDPower: " + result);
+        callback(null, result[0] === 'on' ? 1 : 0);
     }).catch(function(err) {
-        deviceThis.platform.log.error("[MiOutletPlatform][ERROR]PlugBaseWithUSB - SwitchUSB - getUSBPower Error: " + err);
+        deviceThis.platform.log.error("[MiOutletPlatform][ERROR]IntelligencePinboard - SwitchLED - getLEDPower Error: " + err);
         callback(true);
     });
 }
 
-PlugBaseWithUSBSwitchUSB.prototype.setUSBPower = function(value, callback) {
+IntelligencePinboardSwitchLED.prototype.setLEDPower = function(value, callback) {
     if(value) {
-        device.call("set_usb_on", []);
+        device.call("set_wifi_led", ['on']);
     } else {
-        device.call("set_usb_off", []);
+        device.call("set_wifi_led", ['off']);
     }
     
     callback(null);    

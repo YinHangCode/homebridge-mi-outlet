@@ -1,15 +1,19 @@
 require('./Devices/PlugBase');
 require('./Devices/PlugBaseWithUSB');
-//require('./Devices/IntelligencePinboard');
-//require('./Devices/QingPinboard');
-//require('./Devices/QingPinboardWithUSB');
+require('./Devices/IntelligencePinboard');
+require('./Devices/QingPinboard');
 
+var fs = require('fs');
 var packageFile = require("./package.json");
-var Accessory, Service, Characteristic, UUIDGen;
+var PlatformAccessory, Accessory, Service, Characteristic, UUIDGen;
 
 module.exports = function(homebridge) {
-    Accessory = homebridge.platformAccessory;
+    if(!isConfig(homebridge.user.configPath(), "platforms", "MiOutletPlatform")) {
+        return;
+    }
+    
     PlatformAccessory = homebridge.platformAccessory;
+    Accessory = homebridge.hap.Accessory;
     Service = homebridge.hap.Service;
     Characteristic = homebridge.hap.Characteristic;
     UUIDGen = homebridge.hap.uuid;
@@ -17,7 +21,30 @@ module.exports = function(homebridge) {
     homebridge.registerPlatform('homebridge-mi-outlet', 'MiOutletPlatform', MiOutletPlatform);
 }
 
+function isConfig(configFile, type, name) {
+    var config = JSON.parse(fs.readFileSync(configFile));
+    if("accessories" === type) {
+        var accessories = config.accessories;
+        for(var i in accessories) {
+            if(accessories[i]['accessory'] === name) {
+                return true;
+            }
+        }
+    } else if("platforms" === type) {
+        var platforms = config.platforms;
+        for(var i in platforms) {
+            if(platforms[i]['platform'] === name) {
+                return true;
+            }
+        }
+    } else {
+    }
+    
+    return false;
+}
+
 function MiOutletPlatform(log, config, api) {
+
     if(null == config) {
         return;
     }
@@ -63,11 +90,17 @@ MiOutletPlatform.prototype = {
                     myAccessories.push(accessory);
                 });
             } else if (cfgAccessory['type'] == "IntelligencePinboard") {
-
-            } else if (cfgAccessory['type'] == "Intelligence6Pinboard") {
-
+                new IntelligencePinboard(this, cfgAccessory).forEach(function(accessory, index, arr){
+                    myAccessories.push(accessory);
+                });
             } else if (cfgAccessory['type'] == "QingPinboard") {
-
+                new QingPinboard(this, cfgAccessory).forEach(function(accessory, index, arr){
+                    myAccessories.push(accessory);
+                });
+            } else if (cfgAccessory['type'] == "QingPinboardWithUSB") {
+                new QingPinboard(this, cfgAccessory).forEach(function(accessory, index, arr){
+                    myAccessories.push(accessory);
+                });
             } else {
             }
         }

@@ -15,9 +15,9 @@ Thanks for [nfarina](https://github.com/nfarina)(the author of [homebridge](http
 ## Supported Devices
 1.PlugBase(米家智能插座基础版)   
 2.PlugBaseWithUSB(小米智能插座_USB版)   
-3.IntelligencePinboard(米家智能插线板) ---- coming soon   
-4.QingPinboard(青米智能插线板_五孔位版) ---- coming soon   
-5.QingPinboardWithUSB(青米智能插线板_USB版) ---- coming soon   
+3.IntelligencePinboard(米家智能插线板)   
+4.QingPinboard(青米智能插线板_五孔位版)   
+5.QingPinboardWithUSB(青米智能插线板_USB版)   
 ## Installation
 1. Install HomeBridge, please follow it's [README](https://github.com/nfarina/homebridge/blob/master/README.md).   
 If you are using Raspberry Pi, please read [Running-HomeBridge-on-a-Raspberry-Pi](https://github.com/nfarina/homebridge/wiki/Running-HomeBridge-on-a-Raspberry-Pi).   
@@ -50,6 +50,32 @@ npm install -g miio homebridge-mi-outlet
         "temperatureDisable": false,
         "switchUSBName": "study room led usb switch",
         "switchUSBDisable": false
+    }, {
+        "type": "IntelligencePinboard",
+        "ip": "192.168.88.xx",
+        "token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "outletName": "master room outlet",
+        "outletDisable": false,
+        "temperatureName": "master room outlet temperature",
+        "temperatureDisable": false,
+        "switchLEDName": "master room led light switch",
+        "switchLEDDisable": false
+    }, {
+        "type": "QingPinboard",
+        "ip": "192.168.88.xx",
+        "token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "outletName": "dining room outlet",
+        "outletDisable": false,
+        "temperatureName": "dining room outlet temperature",
+        "temperatureDisable": false
+    }, {
+        "type": "QingPinboardWithUSB",
+        "ip": "192.168.88.xx",
+        "token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "outletName": "kitchen room outlet",
+        "outletDisable": false,
+        "temperatureName": "kitchen room outlet temperature",
+        "temperatureDisable": false
     }]
 }]
 ```
@@ -68,6 +94,7 @@ Support: Unknown
 ```
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx is token.
 ## Version Logs
+6.fixed bug that run homebridge error there is no MiAqaraPlatform in config.json file.   
 ### 0.1.0
 1.add support for PlugBaseWithUSB: outlet, temperature sensor, USB switch.   
 2.add PlugBase LED switch.    
