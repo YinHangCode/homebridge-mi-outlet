@@ -100,7 +100,7 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx is token.
 3.add support for Qing Pinboard With USB: outlet, temperature sensor.   
 4.fixed bug that homebridge not works when device is not responding.   
 5.optimized code.   
-6.fixed bug that run homebridge error there is no MiAqaraPlatform in config.json file.   
+6.fixed bug that run homebridge error there is no MiOutletPlatform in config.json file.   
 ### 0.1.0
 1.add support for PlugBaseWithUSB: outlet, temperature sensor, USB switch.   
 2.add PlugBase LED switch.    
