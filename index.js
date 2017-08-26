@@ -44,7 +44,6 @@ function isConfig(configFile, type, name) {
 }
 
 function MiOutletPlatform(log, config, api) {
-
     if(null == config) {
         return;
     }
