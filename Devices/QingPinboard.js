@@ -4,7 +4,6 @@ const inherits = require('util').inherits;
 const miio = require('miio');
 
 var Accessory, PlatformAccessory, Service, Characteristic, UUIDGen;
-var deviceThis, device;
 
 QingPinboard = function(platform, config) {
     this.init(platform, config);
@@ -15,26 +14,27 @@ QingPinboard = function(platform, config) {
     Characteristic = platform.Characteristic;
     UUIDGen = platform.UUIDGen;
 
-    deviceThis = this;
-    device = new miio.Device({
-        address: deviceThis.config['ip'],
-        token: deviceThis.config['token']
+    this.device = new miio.Device({
+        address: this.config['ip'],
+        token: this.config['token']
     });
     
     this.accessories = {};
     if(!this.config['outletDisable'] && this.config['outletName'] && this.config['outletName'] != "") {
-        this.accessories['outletAccessory'] = new QingPinboardOutlet();
+        this.accessories['outletAccessory'] = new QingPinboardOutlet(this);
     }
     if(!this.config['temperatureDisable'] && this.config['temperatureName'] && this.config['temperatureName'] != "") {
-        this.accessories['temperatureAccessory'] = new QingPinboardTemperature();
+        this.accessories['temperatureAccessory'] = new QingPinboardTemperature(this);
     }
     
     return this.obj2array(this.accessories);
 }
 inherits(QingPinboard, Base);
 
-QingPinboardOutlet = function() {
-    this.name = deviceThis.config['outletName'];
+QingPinboardOutlet = function(dThis) {
+    this.device = dThis.device;
+    this.name = dThis.config['outletName'];
+    this.platform = dThis.platform;
 }
 
 QingPinboardOutlet.prototype.getServices = function() {
@@ -58,27 +58,29 @@ QingPinboardOutlet.prototype.getServices = function() {
 }
 
 QingPinboardOutlet.prototype.getPower = function(callback) {
-    device.call("get_prop", ["power"]).then(result => {
-        deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]QingPinboard - Outlet - getPower: " + result);
+    this.device.call("get_prop", ["power"]).then(result => {
+        this.platform.log.debug("[MiOutletPlatform][DEBUG]QingPinboard - Outlet - getPower: " + result);
         callback(null, result[0] === 'on' ? 1 : 0);
     }).catch(function(err) {
-        deviceThis.platform.log.error("[MiOutletPlatform][ERROR]QingPinboard - Outlet - getPower Error: " + err);
+        this.platform.log.error("[MiOutletPlatform][ERROR]QingPinboard - Outlet - getPower Error: " + err);
         callback(true);
     });
 }
 
 QingPinboardOutlet.prototype.setPower = function(value, callback) {
     if(value) {
-        device.call("set_power", ['on']);
+        this.device.call("set_power", ['on']);
     } else {
-        device.call("set_power", ['off']);
+        this.device.call("set_power", ['off']);
     }
     
     callback(null);    
 }
 
-QingPinboardTemperature = function() {
-    this.name = deviceThis.config['temperatureName'];
+QingPinboardTemperature = function(dThis) {
+    this.device = dThis.device;
+    this.name = dThis.config['temperatureName'];
+    this.platform = dThis.platform;
 }
 
 QingPinboardTemperature.prototype.getServices = function() {
@@ -101,11 +103,11 @@ QingPinboardTemperature.prototype.getServices = function() {
 }
 
 QingPinboardTemperature.prototype.getTemperature = function(callback) {
-    device.call("get_prop", ["temperature"]).then(result => {
-        deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]QingPinboard - Temperature - getTemperature: " + result);
+    this.device.call("get_prop", ["temperature"]).then(result => {
+        this.platform.log.debug("[MiOutletPlatform][DEBUG]QingPinboard - Temperature - getTemperature: " + result);
         callback(null, result[0]);
     }).catch(function(err) {
-        deviceThis.platform.log.error("[MiOutletPlatform][ERROR]QingPinboard - Temperature - getTemperature Error: " + err);
+        this.platform.log.error("[MiOutletPlatform][ERROR]QingPinboard - Temperature - getTemperature Error: " + err);
         callback(true);
     });
 }

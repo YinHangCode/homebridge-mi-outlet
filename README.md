@@ -94,6 +94,8 @@ Support: Unknown
 ```
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx is token.
 ## Version Logs
+### 0.2.2
+1.fixed bug that many of the same type of device conflict with each other.   
 ### 0.2.1
 1.optimized code.   
 ### 0.2.0

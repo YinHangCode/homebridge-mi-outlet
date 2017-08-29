@@ -4,7 +4,6 @@ const inherits = require('util').inherits;
 const miio = require('miio');
 
 var Accessory, PlatformAccessory, Service, Characteristic, UUIDGen;
-var deviceThis, device;
 
 PlugBaseWithUSB = function(platform, config) {
     this.init(platform, config);
@@ -15,29 +14,30 @@ PlugBaseWithUSB = function(platform, config) {
     Characteristic = platform.Characteristic;
     UUIDGen = platform.UUIDGen;
     
-    deviceThis = this;
-    device = new miio.Device({
-        address: deviceThis.config['ip'],
-        token: deviceThis.config['token']
+    this.device = new miio.Device({
+        address: this.config['ip'],
+        token: this.config['token']
     });
     
     this.accessories = {};
     if(!this.config['outletDisable'] && this.config['outletName'] && this.config['outletName'] != "") {
-        this.accessories['outletAccessory'] = new PlugBaseWithUSBOutlet();
+        this.accessories['outletAccessory'] = new PlugBaseWithUSBOutlet(this);
     }
     if(!this.config['temperatureDisable'] && this.config['temperatureName'] && this.config['temperatureName'] != "") {
-        this.accessories['temperatureAccessory'] = new PlugBaseWithUSBTemperature();
+        this.accessories['temperatureAccessory'] = new PlugBaseWithUSBTemperature(this);
     }
     if(!this.config['switchUSBDisable'] && this.config['switchUSBName'] && this.config['switchUSBName'] != "") {
-        this.accessories['switchUSBAccessory'] = new PlugBaseWithUSBSwitchUSB();
+        this.accessories['switchUSBAccessory'] = new PlugBaseWithUSBSwitchUSB(this);
     }
     
     return this.obj2array(this.accessories);
 }
 inherits(PlugBaseWithUSB, Base);
 
-PlugBaseWithUSBOutlet = function() {
-    this.name = deviceThis.config['outletName'];
+PlugBaseWithUSBOutlet = function(dThis) {
+    this.device = dThis.device;
+    this.name = dThis.config['outletName'];
+    this.platform = dThis.platform;
 }
 
 PlugBaseWithUSBOutlet.prototype.getServices = function() {
@@ -61,27 +61,29 @@ PlugBaseWithUSBOutlet.prototype.getServices = function() {
 }
 
 PlugBaseWithUSBOutlet.prototype.getPower = function(callback) {
-    device.call("get_prop", ["on"]).then(result => {
-        deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBaseWithUSB - Outlet - getPower: " + result);
+    this.device.call("get_prop", ["on"]).then(result => {
+        this.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBaseWithUSB - Outlet - getPower: " + result);
         callback(null, result[0]);
     }).catch(function(err) {
-        deviceThis.platform.log.error("[MiOutletPlatform][ERROR]PlugBaseWithUSB - Outlet - getPower Error: " + err);
+        this.platform.log.error("[MiOutletPlatform][ERROR]PlugBaseWithUSB - Outlet - getPower Error: " + err);
         callback(true);
     });
 }
 
 PlugBaseWithUSBOutlet.prototype.setPower = function(value, callback) {
     if(value) {
-        device.call("set_on", []);
+        this.device.call("set_on", []);
     } else {
-        device.call("set_off", []);
+        this.device.call("set_off", []);
     }
     
     callback(null);    
 }
 
-PlugBaseWithUSBTemperature = function() {
-    this.name = deviceThis.config['temperatureName'];
+PlugBaseWithUSBTemperature = function(dThis) {
+    this.device = dThis.device;
+    this.name = dThis.config['temperatureName'];
+    this.platform = dThis.platform;
 }
 
 PlugBaseWithUSBTemperature.prototype.getServices = function() {
@@ -104,17 +106,19 @@ PlugBaseWithUSBTemperature.prototype.getServices = function() {
 }
 
 PlugBaseWithUSBTemperature.prototype.getTemperature = function(callback) {
-    device.call("get_prop", ["temperature"]).then(result => {
-        deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBaseWithUSB - Temperature - getTemperature: " + result);
+    this.device.call("get_prop", ["temperature"]).then(result => {
+        this.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBaseWithUSB - Temperature - getTemperature: " + result);
         callback(null, result[0]);
     }).catch(function(err) {
-        deviceThis.platform.log.error("[MiOutletPlatform][ERROR]PlugBaseWithUSB - Temperature - getTemperature Error: " + err);
+        this.platform.log.error("[MiOutletPlatform][ERROR]PlugBaseWithUSB - Temperature - getTemperature Error: " + err);
         callback(true);
     });
 }
 
-PlugBaseWithUSBSwitchUSB = function() {
-    this.name = deviceThis.config['switchUSBName'];
+PlugBaseWithUSBSwitchUSB = function(dThis) {
+    this.device = dThis.device;
+    this.name = dThis.config['switchUSBName'];
+    this.platform = dThis.platform;
 }
 
 PlugBaseWithUSBSwitchUSB.prototype.getServices = function() {
@@ -138,20 +142,20 @@ PlugBaseWithUSBSwitchUSB.prototype.getServices = function() {
 }
 
 PlugBaseWithUSBSwitchUSB.prototype.getUSBPower = function(callback) {
-    device.call("get_prop", ["usb_on"]).then(result => {
-        deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBaseWithUSB - SwitchUSB - getUSBPower: " + result);
+    this.device.call("get_prop", ["usb_on"]).then(result => {
+        this.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBaseWithUSB - SwitchUSB - getUSBPower: " + result);
         callback(null, result[0]);
     }).catch(function(err) {
-        deviceThis.platform.log.error("[MiOutletPlatform][ERROR]PlugBaseWithUSB - SwitchUSB - getUSBPower Error: " + err);
+        this.platform.log.error("[MiOutletPlatform][ERROR]PlugBaseWithUSB - SwitchUSB - getUSBPower Error: " + err);
         callback(true);
     });
 }
 
 PlugBaseWithUSBSwitchUSB.prototype.setUSBPower = function(value, callback) {
     if(value) {
-        device.call("set_usb_on", []);
+        this.device.call("set_usb_on", []);
     } else {
-        device.call("set_usb_off", []);
+        this.device.call("set_usb_off", []);
     }
     
     callback(null);    

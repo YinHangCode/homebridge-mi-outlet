@@ -4,7 +4,6 @@ const inherits = require('util').inherits;
 const miio = require('miio');
 
 var Accessory, PlatformAccessory, Service, Characteristic, UUIDGen;
-var deviceThis, device;
 
 IntelligencePinboard = function(platform, config) {
     this.init(platform, config);
@@ -15,29 +14,30 @@ IntelligencePinboard = function(platform, config) {
     Characteristic = platform.Characteristic;
     UUIDGen = platform.UUIDGen;
     
-    deviceThis = this;
-    device = new miio.Device({
-        address: deviceThis.config['ip'],
-        token: deviceThis.config['token']
+    this.device = new miio.Device({
+        address: this.config['ip'],
+        token: this.config['token']
     });
     
     this.accessories = {};
     if(!this.config['outletDisable'] && this.config['outletName'] && this.config['outletName'] != "") {
-        this.accessories['outletAccessory'] = new IntelligencePinboardOutlet();
+        this.accessories['outletAccessory'] = new IntelligencePinboardOutlet(this);
     }
     if(!this.config['temperatureDisable'] && this.config['temperatureName'] && this.config['temperatureName'] != "") {
-        this.accessories['temperatureAccessory'] = new IntelligencePinboardTemperature();
+        this.accessories['temperatureAccessory'] = new IntelligencePinboardTemperature(this);
     }
     if(!this.config['switchLEDDisable'] && this.config['switchLEDName'] && this.config['switchLEDName'] != "") {
-        this.accessories['switchLEDAccessory'] = new IntelligencePinboardSwitchLED();
+        this.accessories['switchLEDAccessory'] = new IntelligencePinboardSwitchLED(this);
     }
     
     return this.obj2array(this.accessories);
 }
 inherits(IntelligencePinboard, Base);
 
-IntelligencePinboardOutlet = function() {
-    this.name = deviceThis.config['outletName'];
+IntelligencePinboardOutlet = function(dThis) {
+    this.device = dThis.device;
+    this.name = dThis.config['outletName'];
+    this.platform = dThis.platform;
 }
 
 IntelligencePinboardOutlet.prototype.getServices = function() {
@@ -61,27 +61,29 @@ IntelligencePinboardOutlet.prototype.getServices = function() {
 }
 
 IntelligencePinboardOutlet.prototype.getPower = function(callback) {
-    device.call("get_prop", ["power"]).then(result => {
-        deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]IntelligencePinboard - Outlet - getPower: " + result);
+    this.device.call("get_prop", ["power"]).then(result => {
+        this.platform.log.debug("[MiOutletPlatform][DEBUG]IntelligencePinboard - Outlet - getPower: " + result);
         callback(null, result[0] === 'on' ? 1 : 0);
     }).catch(function(err) {
-        deviceThis.platform.log.error("[MiOutletPlatform][ERROR]IntelligencePinboard - Outlet - getPower Error: " + err);
+        this.platform.log.error("[MiOutletPlatform][ERROR]IntelligencePinboard - Outlet - getPower Error: " + err);
         callback(true);
     });
 }
 
 IntelligencePinboardOutlet.prototype.setPower = function(value, callback) {
     if(value) {
-        device.call("set_power", ['on']);
+        this.device.call("set_power", ['on']);
     } else {
-        device.call("set_power", ['off']);
+        this.device.call("set_power", ['off']);
     }
     
     callback(null);    
 }
 
-IntelligencePinboardTemperature = function() {
-    this.name = deviceThis.config['temperatureName'];
+IntelligencePinboardTemperature = function(dThis) {
+    this.device = dThis.device;
+    this.name = dThis.config['temperatureName'];
+    this.platform = dThis.platform;
 }
 
 IntelligencePinboardTemperature.prototype.getServices = function() {
@@ -104,17 +106,19 @@ IntelligencePinboardTemperature.prototype.getServices = function() {
 }
 
 IntelligencePinboardTemperature.prototype.getTemperature = function(callback) {
-    device.call("get_prop", ["temperature"]).then(result => {
-        deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]IntelligencePinboard - Temperature - getTemperature: " + result);
+    this.device.call("get_prop", ["temperature"]).then(result => {
+        this.platform.log.debug("[MiOutletPlatform][DEBUG]IntelligencePinboard - Temperature - getTemperature: " + result);
         callback(null, result[0]);
     }).catch(function(err) {
-        deviceThis.platform.log.error("[MiOutletPlatform][ERROR]IntelligencePinboard - Temperature - getTemperature Error: " + err);
+        this.platform.log.error("[MiOutletPlatform][ERROR]IntelligencePinboard - Temperature - getTemperature Error: " + err);
         callback(true);
     });
 }
 
-IntelligencePinboardSwitchLED = function() {
-    this.name = deviceThis.config['switchLEDName'];
+IntelligencePinboardSwitchLED = function(dThis) {
+    this.device = dThis.device;
+    this.name = dThis.config['switchLEDName'];
+    this.platform = dThis.platform;
 }
 
 IntelligencePinboardSwitchLED.prototype.getServices = function() {
@@ -138,20 +142,20 @@ IntelligencePinboardSwitchLED.prototype.getServices = function() {
 }
 
 IntelligencePinboardSwitchLED.prototype.getLEDPower = function(callback) {
-    device.call("get_prop", ["wifi_led"]).then(result => {
-        deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]IntelligencePinboard - SwitchLED - getLEDPower: " + result);
+    this.device.call("get_prop", ["wifi_led"]).then(result => {
+        this.platform.log.debug("[MiOutletPlatform][DEBUG]IntelligencePinboard - SwitchLED - getLEDPower: " + result);
         callback(null, result[0] === 'on' ? 1 : 0);
     }).catch(function(err) {
-        deviceThis.platform.log.error("[MiOutletPlatform][ERROR]IntelligencePinboard - SwitchLED - getLEDPower Error: " + err);
+        this.platform.log.error("[MiOutletPlatform][ERROR]IntelligencePinboard - SwitchLED - getLEDPower Error: " + err);
         callback(true);
     });
 }
 
 IntelligencePinboardSwitchLED.prototype.setLEDPower = function(value, callback) {
     if(value) {
-        device.call("set_wifi_led", ['on']);
+        this.device.call("set_wifi_led", ['on']);
     } else {
-        device.call("set_wifi_led", ['off']);
+        this.device.call("set_wifi_led", ['off']);
     }
     
     callback(null);    

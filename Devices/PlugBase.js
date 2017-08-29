@@ -4,7 +4,6 @@ const inherits = require('util').inherits;
 const miio = require('miio');
 
 var Accessory, PlatformAccessory, Service, Characteristic, UUIDGen;
-var deviceThis, device;
 
 PlugBase = function(platform, config) {
     this.init(platform, config);
@@ -15,29 +14,30 @@ PlugBase = function(platform, config) {
     Characteristic = platform.Characteristic;
     UUIDGen = platform.UUIDGen;
     
-    deviceThis = this;
-    device = new miio.Device({
-        address: deviceThis.config['ip'],
-        token: deviceThis.config['token']
+    this.device = new miio.Device({
+        address: this.config['ip'],
+        token: this.config['token']
     });
     
     this.accessories = {};
     if(!this.config['outletDisable'] && this.config['outletName'] && this.config['outletName'] != "") {
-        this.accessories['outletAccessory'] = new PlugBaseOutlet();
+        this.accessories['outletAccessory'] = new PlugBaseOutlet(this);
     }
     if(!this.config['temperatureDisable'] && this.config['temperatureName'] && this.config['temperatureName'] != "") {
-        this.accessories['temperatureAccessory'] = new PlugBaseTemperature();
+        this.accessories['temperatureAccessory'] = new PlugBaseTemperature(this);
     }
     if(!this.config['switchLEDDisable'] && this.config['switchLEDName'] && this.config['switchLEDName'] != "") {
-        this.accessories['switchLEDAccessory'] = new PlugBaseSwitchLED();
+        this.accessories['switchLEDAccessory'] = new PlugBaseSwitchLED(this);
     }
     
     return this.obj2array(this.accessories);
 }
 inherits(PlugBase, Base);
 
-PlugBaseOutlet = function() {
-    this.name = deviceThis.config['outletName'];
+PlugBaseOutlet = function(dThis) {
+    this.device = dThis.device;
+    this.name = dThis.config['outletName'];
+    this.platform = dThis.platform;
 }
 
 PlugBaseOutlet.prototype.getServices = function() {
@@ -61,27 +61,29 @@ PlugBaseOutlet.prototype.getServices = function() {
 }
 
 PlugBaseOutlet.prototype.getPower = function(callback) {
-    device.call("get_prop", ["power"]).then(result => {
-        deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - Outlet - getPower: " + result);
+    this.device.call("get_prop", ["power"]).then(result => {
+        this.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - Outlet - getPower: " + result);
         callback(null, result[0] === 'on' ? 1 : 0);
     }).catch(function(err) {
-        deviceThis.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - Outlet - getPower Error: " + err);
+        this.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - Outlet - getPower Error: " + err);
         callback(true);
     });
 }
 
 PlugBaseOutlet.prototype.setPower = function(value, callback) {
     if(value) {
-        device.call("set_power", ['on']);
+        this.device.call("set_power", ['on']);
     } else {
-        device.call("set_power", ['off']);
+        this.device.call("set_power", ['off']);
     }
     
     callback(null);    
 }
 
-PlugBaseTemperature = function() {
-    this.name = deviceThis.config['temperatureName'];
+PlugBaseTemperature = function(dThis) {
+    this.device = dThis.device;
+    this.name = dThis.config['temperatureName'];
+    this.platform = dThis.platform;
 }
 
 PlugBaseTemperature.prototype.getServices = function() {
@@ -104,17 +106,19 @@ PlugBaseTemperature.prototype.getServices = function() {
 }
 
 PlugBaseTemperature.prototype.getTemperature = function(callback) {
-    device.call("get_prop", ["temperature"]).then(result => {
-        deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - Temperature - getTemperature: " + result);
+    this.device.call("get_prop", ["temperature"]).then(result => {
+        this.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - Temperature - getTemperature: " + result);
         callback(null, result[0]);
     }).catch(function(err) {
-        deviceThis.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - Temperature - getTemperature Error: " + err);
+        this.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - Temperature - getTemperature Error: " + err);
         callback(true);
     });
 }
 
-PlugBaseSwitchLED = function() {
-    this.name = deviceThis.config['switchLEDName'];
+PlugBaseSwitchLED = function(dThis) {
+    this.device = dThis.device;
+    this.name = dThis.config['switchLEDName'];
+    this.platform = dThis.platform;
 }
 
 PlugBaseSwitchLED.prototype.getServices = function() {
@@ -138,20 +142,20 @@ PlugBaseSwitchLED.prototype.getServices = function() {
 }
 
 PlugBaseSwitchLED.prototype.getLEDPower = function(callback) {
-    device.call("get_prop", ["wifi_led"]).then(result => {
-        deviceThis.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - SwitchLED - getLEDPower: " + result);
+    this.device.call("get_prop", ["wifi_led"]).then(result => {
+        this.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - SwitchLED - getLEDPower: " + result);
         callback(null, result[0] === 'on' ? 1 : 0);
     }).catch(function(err) {
-        deviceThis.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - SwitchLED - getLEDPower Error: " + err);
+        this.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - SwitchLED - getLEDPower Error: " + err);
         callback(true);
     });
 }
 
 PlugBaseSwitchLED.prototype.setLEDPower = function(value, callback) {
     if(value) {
-        device.call("set_wifi_led", ['on']);
+        this.device.call("set_wifi_led", ['on']);
     } else {
-        device.call("set_wifi_led", ['off']);
+        this.device.call("set_wifi_led", ['off']);
     }
     
     callback(null);    
