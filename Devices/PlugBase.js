@@ -29,8 +29,11 @@ PlugBase = function(platform, config) {
     if(!this.config['switchLEDDisable'] && this.config['switchLEDName'] && this.config['switchLEDName'] != "") {
         this.accessories['switchLEDAccessory'] = new PlugBaseSwitchLED(this);
     }
+    var accessoriesArr = this.obj2array(this.accessories);
     
-    return this.obj2array(this.accessories);
+    this.platform.log.debug("[MiOutletPlatform][DEBUG]Initializing " + this.config["type"] + " device: " + this.config["ip"] + ", accessories size: " + accessoriesArr.length);
+    
+    return accessoriesArr;
 }
 inherits(PlugBase, Base);
 
@@ -61,11 +64,12 @@ PlugBaseOutlet.prototype.getServices = function() {
 }
 
 PlugBaseOutlet.prototype.getPower = function(callback) {
+    var that = this;
     this.device.call("get_prop", ["power"]).then(result => {
-        this.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - Outlet - getPower: " + result);
+        that.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - Outlet - getPower: " + result);
         callback(null, result[0] === 'on' ? 1 : 0);
     }).catch(function(err) {
-        this.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - Outlet - getPower Error: " + err);
+        that.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - Outlet - getPower Error: " + err);
         callback(true);
     });
 }
@@ -106,11 +110,12 @@ PlugBaseTemperature.prototype.getServices = function() {
 }
 
 PlugBaseTemperature.prototype.getTemperature = function(callback) {
+    var that = this;
     this.device.call("get_prop", ["temperature"]).then(result => {
-        this.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - Temperature - getTemperature: " + result);
+        that.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - Temperature - getTemperature: " + result);
         callback(null, result[0]);
     }).catch(function(err) {
-        this.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - Temperature - getTemperature Error: " + err);
+        that.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - Temperature - getTemperature Error: " + err);
         callback(true);
     });
 }
@@ -142,11 +147,12 @@ PlugBaseSwitchLED.prototype.getServices = function() {
 }
 
 PlugBaseSwitchLED.prototype.getLEDPower = function(callback) {
+    var that = this;
     this.device.call("get_prop", ["wifi_led"]).then(result => {
-        this.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - SwitchLED - getLEDPower: " + result);
+        that.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - SwitchLED - getLEDPower: " + result);
         callback(null, result[0] === 'on' ? 1 : 0);
     }).catch(function(err) {
-        this.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - SwitchLED - getLEDPower Error: " + err);
+        that.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - SwitchLED - getLEDPower Error: " + err);
         callback(true);
     });
 }

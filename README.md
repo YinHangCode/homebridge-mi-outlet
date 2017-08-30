@@ -30,7 +30,7 @@ npm install -g miio homebridge-mi-outlet
 ```
 "platforms": [{
     "platform": "MiOutletPlatform",
-    "accessories": [{
+    "deviceCfgs": [{
         "type": "PlugBase",
         "ip": "192.168.88.xx",
         "token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
@@ -94,6 +94,9 @@ Support: Unknown
 ```
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx is token.
 ## Version Logs
+### 0.2.2
+1.fixed bug that 'log of undefined' error.    
+2.config item 'accessories' renamed 'deviceCfgs'.   
 ### 0.2.2
 1.fixed bug that many of the same type of device conflict with each other.   
 ### 0.2.1

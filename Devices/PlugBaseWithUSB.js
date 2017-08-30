@@ -29,8 +29,11 @@ PlugBaseWithUSB = function(platform, config) {
     if(!this.config['switchUSBDisable'] && this.config['switchUSBName'] && this.config['switchUSBName'] != "") {
         this.accessories['switchUSBAccessory'] = new PlugBaseWithUSBSwitchUSB(this);
     }
+    var accessoriesArr = this.obj2array(this.accessories);
     
-    return this.obj2array(this.accessories);
+    this.platform.log.debug("[MiOutletPlatform][DEBUG]Initializing " + this.config["type"] + " device: " + this.config["ip"] + ", accessories size: " + accessoriesArr.length);
+    
+    return accessoriesArr;
 }
 inherits(PlugBaseWithUSB, Base);
 
@@ -61,11 +64,12 @@ PlugBaseWithUSBOutlet.prototype.getServices = function() {
 }
 
 PlugBaseWithUSBOutlet.prototype.getPower = function(callback) {
+    var that = this;
     this.device.call("get_prop", ["on"]).then(result => {
-        this.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBaseWithUSB - Outlet - getPower: " + result);
+        that.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBaseWithUSB - Outlet - getPower: " + result);
         callback(null, result[0]);
     }).catch(function(err) {
-        this.platform.log.error("[MiOutletPlatform][ERROR]PlugBaseWithUSB - Outlet - getPower Error: " + err);
+        that.platform.log.error("[MiOutletPlatform][ERROR]PlugBaseWithUSB - Outlet - getPower Error: " + err);
         callback(true);
     });
 }
@@ -106,11 +110,12 @@ PlugBaseWithUSBTemperature.prototype.getServices = function() {
 }
 
 PlugBaseWithUSBTemperature.prototype.getTemperature = function(callback) {
+    var that = this;
     this.device.call("get_prop", ["temperature"]).then(result => {
-        this.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBaseWithUSB - Temperature - getTemperature: " + result);
+        that.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBaseWithUSB - Temperature - getTemperature: " + result);
         callback(null, result[0]);
     }).catch(function(err) {
-        this.platform.log.error("[MiOutletPlatform][ERROR]PlugBaseWithUSB - Temperature - getTemperature Error: " + err);
+        that.platform.log.error("[MiOutletPlatform][ERROR]PlugBaseWithUSB - Temperature - getTemperature Error: " + err);
         callback(true);
     });
 }
@@ -142,11 +147,12 @@ PlugBaseWithUSBSwitchUSB.prototype.getServices = function() {
 }
 
 PlugBaseWithUSBSwitchUSB.prototype.getUSBPower = function(callback) {
+    var that = this;
     this.device.call("get_prop", ["usb_on"]).then(result => {
-        this.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBaseWithUSB - SwitchUSB - getUSBPower: " + result);
+        that.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBaseWithUSB - SwitchUSB - getUSBPower: " + result);
         callback(null, result[0]);
     }).catch(function(err) {
-        this.platform.log.error("[MiOutletPlatform][ERROR]PlugBaseWithUSB - SwitchUSB - getUSBPower Error: " + err);
+        that.platform.log.error("[MiOutletPlatform][ERROR]PlugBaseWithUSB - SwitchUSB - getUSBPower Error: " + err);
         callback(true);
     });
 }

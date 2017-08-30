@@ -2,6 +2,7 @@ require('./Devices/PlugBase');
 require('./Devices/PlugBaseWithUSB');
 require('./Devices/IntelligencePinboard');
 require('./Devices/QingPinboard');
+require('./Devices/QingPinboardWithUSB');
 
 var fs = require('fs');
 var packageFile = require("./package.json");
@@ -73,37 +74,40 @@ MiOutletPlatform.prototype = {
     accessories: function(callback) {
         var myAccessories = [];
 
-        var cfgAccessories = this.config['accessories'];
-        if(null == cfgAccessories) {
-            return;
+        var deviceCfgs = this.config['deviceCfgs'];
+        if(deviceCfgs instanceof Array) {        
+            for (var i = 0; i < deviceCfgs.length; i++) {
+                var deviceCfg = deviceCfgs[i];
+                if(null == deviceCfg['type'] || "" == deviceCfg['type'] || null == deviceCfg['token'] || "" == deviceCfg['token'] || null == deviceCfg['ip'] || "" == deviceCfg['ip']) {
+                    continue;
+                }
+                
+                if (deviceCfg['type'] == "PlugBase") {
+                    new PlugBase(this, deviceCfg).forEach(function(accessory, index, arr){
+                        myAccessories.push(accessory);
+                    });
+                } else if (deviceCfg['type'] == "PlugBaseWithUSB") {
+                    new PlugBaseWithUSB(this, deviceCfg).forEach(function(accessory, index, arr){
+                        myAccessories.push(accessory);
+                    });
+                } else if (deviceCfg['type'] == "IntelligencePinboard") {
+                    new IntelligencePinboard(this, deviceCfg).forEach(function(accessory, index, arr){
+                        myAccessories.push(accessory);
+                    });
+                } else if (deviceCfg['type'] == "QingPinboard") {
+                    new QingPinboard(this, deviceCfg).forEach(function(accessory, index, arr){
+                        myAccessories.push(accessory);
+                    });
+                } else if (deviceCfg['type'] == "QingPinboardWithUSB") {
+                    new QingPinboardWithUSB(this, deviceCfg).forEach(function(accessory, index, arr){
+                        myAccessories.push(accessory);
+                    });
+                } else {
+                }
+            }
+            this.log.info("[MiOutletPlatform][INFO]device size: " + deviceCfgs.length + ", accessories size: " + myAccessories.length);
         }
         
-        for (var i = 0; i < cfgAccessories.length; i++) {
-            var cfgAccessory = cfgAccessories[i];
-            if (cfgAccessory['type'] == "PlugBase") {
-                new PlugBase(this, cfgAccessory).forEach(function(accessory, index, arr){
-                    myAccessories.push(accessory);
-                });
-            } else if (cfgAccessory['type'] == "PlugBaseWithUSB") {
-                new PlugBaseWithUSB(this, cfgAccessory).forEach(function(accessory, index, arr){
-                    myAccessories.push(accessory);
-                });
-            } else if (cfgAccessory['type'] == "IntelligencePinboard") {
-                new IntelligencePinboard(this, cfgAccessory).forEach(function(accessory, index, arr){
-                    myAccessories.push(accessory);
-                });
-            } else if (cfgAccessory['type'] == "QingPinboard") {
-                new QingPinboard(this, cfgAccessory).forEach(function(accessory, index, arr){
-                    myAccessories.push(accessory);
-                });
-            } else if (cfgAccessory['type'] == "QingPinboardWithUSB") {
-                new QingPinboard(this, cfgAccessory).forEach(function(accessory, index, arr){
-                    myAccessories.push(accessory);
-                });
-            } else {
-            }
-        }
-
         callback(myAccessories);
     }
 }
