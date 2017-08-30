@@ -94,7 +94,7 @@ Support: Unknown
 ```
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx is token.
 ## Version Logs
-### 0.2.2
+### 0.2.3
 1.fixed bug that 'log of undefined' error.    
 2.config item 'accessories' renamed 'deviceCfgs'.   
 ### 0.2.2
