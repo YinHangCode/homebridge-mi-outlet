@@ -75,7 +75,7 @@ MiOutletPlatform.prototype = {
         var myAccessories = [];
 
         var deviceCfgs = this.config['deviceCfgs'];
-        if(deviceCfgs instanceof Array) {        
+        if(deviceCfgs instanceof Array) {
             for (var i = 0; i < deviceCfgs.length; i++) {
                 var deviceCfg = deviceCfgs[i];
                 if(null == deviceCfg['type'] || "" == deviceCfg['type'] || null == deviceCfg['token'] || "" == deviceCfg['token'] || null == deviceCfg['ip'] || "" == deviceCfg['ip']) {
