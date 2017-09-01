@@ -29,7 +29,7 @@ IntelligencePinboard = function(platform, config) {
     if(!this.config['switchLEDDisable'] && this.config['switchLEDName'] && this.config['switchLEDName'] != "") {
         this.accessories['switchLEDAccessory'] = new IntelligencePinboardSwitchLED(this);
     }
-       var accessoriesArr = this.obj2array(this.accessories);
+    var accessoriesArr = this.obj2array(this.accessories);
     
     this.platform.log.debug("[MiOutletPlatform][DEBUG]Initializing " + this.config["type"] + " device: " + this.config["ip"] + ", accessories size: " + accessoriesArr.length);
     
@@ -58,9 +58,23 @@ IntelligencePinboardOutlet.prototype.getServices = function() {
         .getCharacteristic(Characteristic.On)
         .on('get', this.getPower.bind(this))
         .on('set', this.setPower.bind(this));
+    outletService
+        .getCharacteristic(Characteristic.OutletInUse)
+        .on('get', this.getOutletInUse.bind(this));
     services.push(outletService);
 
     return services;
+}
+
+IntelligencePinboardOutlet.prototype.getOutletInUse = function(callback) {
+    var that = this;
+    this.device.call("get_prop", ["power_consume_rate"]).then(result => {
+        that.platform.log.debug("[MiOutletPlatform][DEBUG]IntelligencePinboard - Outlet - getOutletInUse: " + result);
+        callback(null, result[0] && result[0] > 0 ? true : false);
+    }).catch(function(err) {
+        that.platform.log.error("[MiOutletPlatform][ERROR]IntelligencePinboard - Outlet - getOutletInUse Error: " + err);
+        callback(true);
+    });
 }
 
 IntelligencePinboardOutlet.prototype.getPower = function(callback) {

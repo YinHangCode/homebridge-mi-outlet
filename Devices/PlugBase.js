@@ -58,9 +58,23 @@ PlugBaseOutlet.prototype.getServices = function() {
         .getCharacteristic(Characteristic.On)
         .on('get', this.getPower.bind(this))
         .on('set', this.setPower.bind(this));
+    outletService
+        .getCharacteristic(Characteristic.OutletInUse)
+        .on('get', this.getOutletInUse.bind(this));
     services.push(outletService);
 
     return services;
+}
+
+PlugBaseOutlet.prototype.getOutletInUse = function(callback) {
+    var that = this;
+    this.device.call("get_prop", ["power"]).then(result => {
+        that.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - Outlet - getOutletInUse: " + result);
+        callback(null, result[0] === 'on' ? true : false);
+    }).catch(function(err) {
+        that.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - Outlet - getOutletInUse Error: " + err);
+        callback(true);
+    });
 }
 
 PlugBaseOutlet.prototype.getPower = function(callback) {

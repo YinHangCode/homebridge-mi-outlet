@@ -48,7 +48,7 @@ npm install -g miio homebridge-mi-outlet
         "outletDisable": false,
         "temperatureName": "study room outlet temperature",
         "temperatureDisable": false,
-        "switchUSBName": "study room led usb switch",
+        "switchUSBName": "study room outlet usb switch",
         "switchUSBDisable": false
     }, {
         "type": "IntelligencePinboard",
@@ -94,6 +94,8 @@ Support: Unknown
 ```
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx is token.
 ## Version Logs
+### 0.2.4
+1.add outlet inuse display.    
 ### 0.2.3
 1.fixed bug that 'log of undefined' error.    
 2.config item 'accessories' renamed 'deviceCfgs'.   
