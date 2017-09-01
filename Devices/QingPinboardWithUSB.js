@@ -92,7 +92,7 @@ QingPinboardWithUSBOutlet.prototype.setPower = function(value, callback) {
         this.device.call("set_power", ['off']);
     }
     
-    callback(null);    
+    callback(null);
 }
 
 QingPinboardWithUSBTemperature = function(dThis) {

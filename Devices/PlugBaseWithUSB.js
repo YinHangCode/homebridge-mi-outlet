@@ -95,7 +95,7 @@ PlugBaseWithUSBOutlet.prototype.setPower = function(value, callback) {
         this.device.call("set_off", []);
     }
     
-    callback(null);    
+    callback(null);
 }
 
 PlugBaseWithUSBTemperature = function(dThis) {
@@ -178,5 +178,5 @@ PlugBaseWithUSBSwitchUSB.prototype.setUSBPower = function(value, callback) {
         this.device.call("set_usb_off", []);
     }
     
-    callback(null);    
+    callback(null);
 }

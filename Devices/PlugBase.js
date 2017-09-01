@@ -95,7 +95,7 @@ PlugBaseOutlet.prototype.setPower = function(value, callback) {
         this.device.call("set_power", ['off']);
     }
     
-    callback(null);    
+    callback(null);
 }
 
 PlugBaseTemperature = function(dThis) {
@@ -178,5 +178,5 @@ PlugBaseSwitchLED.prototype.setLEDPower = function(value, callback) {
         this.device.call("set_wifi_led", ['off']);
     }
     
-    callback(null);    
+    callback(null);
 }
