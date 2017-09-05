@@ -70,7 +70,7 @@ QingPinboardWithUSBOutlet.prototype.getOutletInUse = function(callback) {
         callback(null, result[0] && result[0] > 0 ? true : false);
     }).catch(function(err) {
         that.platform.log.error("[MiOutletPlatform][ERROR]IntelligencePinboard - Outlet - getOutletInUse Error: " + err);
-        callback(true);
+        callback(err);
     });
 }
 
@@ -81,18 +81,23 @@ QingPinboardWithUSBOutlet.prototype.getPower = function(callback) {
         callback(null, result[0] === 'on' ? 1 : 0);
     }).catch(function(err) {
         that.platform.log.error("[MiOutletPlatform][ERROR]QingPinboardWithUSB - Outlet - getPower Error: " + err);
-        callback(true);
+        callback(err);
     });
 }
 
 QingPinboardWithUSBOutlet.prototype.setPower = function(value, callback) {
-    if(value) {
-        this.device.call("set_power", ['on']);
-    } else {
-        this.device.call("set_power", ['off']);
-    }
-    
-    callback(null);
+    var that = this;
+    that.device.call("set_power", [value ? "on" : "off"]).then(result => {
+        that.platform.log.debug("[MiOutletPlatform][DEBUG]QingPinboardWithUSB - Outlet - setPower Result: " + result);
+        if(result[0] === "ok") {
+            callback(null);
+        } else {
+            callback(result[0]);
+        }
+    }).catch(function(err) {
+        that.platform.log.error("[MiOutletPlatform][ERROR]QingPinboardWithUSB - Outlet - setPower Error: " + err);
+        callback(err);
+    });
 }
 
 QingPinboardWithUSBTemperature = function(dThis) {
@@ -127,6 +132,6 @@ QingPinboardWithUSBTemperature.prototype.getTemperature = function(callback) {
         callback(null, result[0]);
     }).catch(function(err) {
         that.platform.log.error("[MiOutletPlatform][ERROR]QingPinboardWithUSB - Temperature - getTemperature Error: " + err);
-        callback(true);
+        callback(err);
     });
 }

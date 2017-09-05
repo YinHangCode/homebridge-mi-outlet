@@ -73,7 +73,7 @@ PlugBaseOutlet.prototype.getOutletInUse = function(callback) {
         callback(null, result[0] === 'on' ? true : false);
     }).catch(function(err) {
         that.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - Outlet - getOutletInUse Error: " + err);
-        callback(true);
+        callback(err);
     });
 }
 
@@ -81,21 +81,26 @@ PlugBaseOutlet.prototype.getPower = function(callback) {
     var that = this;
     this.device.call("get_prop", ["power"]).then(result => {
         that.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - Outlet - getPower: " + result);
-        callback(null, result[0] === 'on' ? 1 : 0);
+        callback(null, result[0] === 'on' ? true : false);
     }).catch(function(err) {
         that.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - Outlet - getPower Error: " + err);
-        callback(true);
+        callback(err);
     });
 }
 
 PlugBaseOutlet.prototype.setPower = function(value, callback) {
-    if(value) {
-        this.device.call("set_power", ['on']);
-    } else {
-        this.device.call("set_power", ['off']);
-    }
-    
-    callback(null);
+    var that = this;
+    that.device.call("set_power", [value ? "on" : "off"]).then(result => {
+        that.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - Outlet - setPower Result: " + result);
+        if(result[0] === "ok") {
+            callback(null);
+        } else {
+            callback(result[0]);
+        }
+    }).catch(function(err) {
+        that.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - Outlet - setPower Error: " + err);
+        callback(err);
+    });
 }
 
 PlugBaseTemperature = function(dThis) {
@@ -130,7 +135,7 @@ PlugBaseTemperature.prototype.getTemperature = function(callback) {
         callback(null, result[0]);
     }).catch(function(err) {
         that.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - Temperature - getTemperature Error: " + err);
-        callback(true);
+        callback(err);
     });
 }
 
@@ -164,19 +169,24 @@ PlugBaseSwitchLED.prototype.getLEDPower = function(callback) {
     var that = this;
     this.device.call("get_prop", ["wifi_led"]).then(result => {
         that.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - SwitchLED - getLEDPower: " + result);
-        callback(null, result[0] === 'on' ? 1 : 0);
+        callback(null, result[0] === 'on' ? true : false);
     }).catch(function(err) {
         that.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - SwitchLED - getLEDPower Error: " + err);
-        callback(true);
+        callback(err);
     });
 }
 
 PlugBaseSwitchLED.prototype.setLEDPower = function(value, callback) {
-    if(value) {
-        this.device.call("set_wifi_led", ['on']);
-    } else {
-        this.device.call("set_wifi_led", ['off']);
-    }
-    
-    callback(null);
+    var that = this;
+    that.device.call("set_wifi_led", [value ? "on" : "off"]).then(result => {
+        that.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBase - SwitchLED - setLEDPower Result: " + result);
+        if(result[0] === "ok") {
+            callback(null);
+        } else {
+            callback(result[0]);
+        }
+    }).catch(function(err) {
+        that.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - SwitchLED - setLEDPower Error: " + err);
+        callback(err);
+    });
 }

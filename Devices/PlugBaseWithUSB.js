@@ -73,7 +73,7 @@ PlugBaseWithUSBOutlet.prototype.getOutletInUse = function(callback) {
         callback(null, result[0]);
     }).catch(function(err) {
         that.platform.log.error("[MiOutletPlatform][ERROR]PlugBaseWithUSB - Outlet - getOutletInUse Error: " + err);
-        callback(true);
+        callback(err);
     });
 }
 
@@ -84,18 +84,19 @@ PlugBaseWithUSBOutlet.prototype.getPower = function(callback) {
         callback(null, result[0]);
     }).catch(function(err) {
         that.platform.log.error("[MiOutletPlatform][ERROR]PlugBaseWithUSB - Outlet - getPower Error: " + err);
-        callback(true);
+        callback(err);
     });
 }
 
 PlugBaseWithUSBOutlet.prototype.setPower = function(value, callback) {
-    if(value) {
-        this.device.call("set_on", []);
-    } else {
-        this.device.call("set_off", []);
-    }
-    
-    callback(null);
+    var that = this;
+    that.device.call(value ? "set_on" : "set_off", []).then(result => {
+        that.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBaseWithUSB - Outlet - setPower Result: " + result);
+        callback(null);
+    }).catch(function(err) {
+        that.platform.log.error("[MiOutletPlatform][ERROR]PlugBaseWithUSB - Outlet - setPower Error: " + err);
+        callback(err);
+    });
 }
 
 PlugBaseWithUSBTemperature = function(dThis) {
@@ -130,7 +131,7 @@ PlugBaseWithUSBTemperature.prototype.getTemperature = function(callback) {
         callback(null, result[0]);
     }).catch(function(err) {
         that.platform.log.error("[MiOutletPlatform][ERROR]PlugBaseWithUSB - Temperature - getTemperature Error: " + err);
-        callback(true);
+        callback(err);
     });
 }
 
@@ -167,16 +168,17 @@ PlugBaseWithUSBSwitchUSB.prototype.getUSBPower = function(callback) {
         callback(null, result[0]);
     }).catch(function(err) {
         that.platform.log.error("[MiOutletPlatform][ERROR]PlugBaseWithUSB - SwitchUSB - getUSBPower Error: " + err);
-        callback(true);
+        callback(err);
     });
 }
 
 PlugBaseWithUSBSwitchUSB.prototype.setUSBPower = function(value, callback) {
-    if(value) {
-        this.device.call("set_usb_on", []);
-    } else {
-        this.device.call("set_usb_off", []);
-    }
-    
-    callback(null);
+    var that = this;
+    that.device.call(value ? "set_usb_on" : "set_usb_off", []).then(result => {
+        that.platform.log.debug("[MiOutletPlatform][DEBUG]PlugBaseWithUSB - SwitchUSB - setUSBPower Result: " + result);
+        callback(null);
+    }).catch(function(err) {
+        that.platform.log.error("[MiOutletPlatform][ERROR]PlugBaseWithUSB - SwitchUSB - setUSBPower Error: " + err);
+        callback(err);
+    });
 }

@@ -73,7 +73,7 @@ IntelligencePinboardOutlet.prototype.getOutletInUse = function(callback) {
         callback(null, result[0] && result[0] > 0 ? true : false);
     }).catch(function(err) {
         that.platform.log.error("[MiOutletPlatform][ERROR]IntelligencePinboard - Outlet - getOutletInUse Error: " + err);
-        callback(true);
+        callback(err);
     });
 }
 
@@ -81,21 +81,26 @@ IntelligencePinboardOutlet.prototype.getPower = function(callback) {
     var that = this;
     this.device.call("get_prop", ["power"]).then(result => {
         that.platform.log.debug("[MiOutletPlatform][DEBUG]IntelligencePinboard - Outlet - getPower: " + result);
-        callback(null, result[0] === 'on' ? 1 : 0);
+        callback(null, result[0] === 'on' ? true : false);
     }).catch(function(err) {
         that.platform.log.error("[MiOutletPlatform][ERROR]IntelligencePinboard - Outlet - getPower Error: " + err);
-        callback(true);
+        callback(err);
     });
 }
 
 IntelligencePinboardOutlet.prototype.setPower = function(value, callback) {
-    if(value) {
-        this.device.call("set_power", ['on']);
-    } else {
-        this.device.call("set_power", ['off']);
-    }
-    
-    callback(null);
+    var that = this;
+    that.device.call("set_power", [value ? "on" : "off"]).then(result => {
+        that.platform.log.debug("[MiOutletPlatform][DEBUG]IntelligencePinboard - Outlet - setPower Result: " + result);
+        if(result[0] === "ok") {
+            callback(null);
+        } else {
+            callback(result[0]);
+        }
+    }).catch(function(err) {
+        that.platform.log.error("[MiOutletPlatform][ERROR]IntelligencePinboard - Outlet - setPower Error: " + err);
+        callback(err);
+    });
 }
 
 IntelligencePinboardTemperature = function(dThis) {
@@ -130,7 +135,7 @@ IntelligencePinboardTemperature.prototype.getTemperature = function(callback) {
         callback(null, result[0]);
     }).catch(function(err) {
         that.platform.log.error("[MiOutletPlatform][ERROR]IntelligencePinboard - Temperature - getTemperature Error: " + err);
-        callback(true);
+        callback(err);
     });
 }
 
@@ -164,19 +169,24 @@ IntelligencePinboardSwitchLED.prototype.getLEDPower = function(callback) {
     var that = this;
     this.device.call("get_prop", ["wifi_led"]).then(result => {
         that.platform.log.debug("[MiOutletPlatform][DEBUG]IntelligencePinboard - SwitchLED - getLEDPower: " + result);
-        callback(null, result[0] === 'on' ? 1 : 0);
+        callback(null, result[0] === 'on' ? true : false);
     }).catch(function(err) {
         that.platform.log.error("[MiOutletPlatform][ERROR]IntelligencePinboard - SwitchLED - getLEDPower Error: " + err);
-        callback(true);
+        callback(err);
     });
 }
 
 IntelligencePinboardSwitchLED.prototype.setLEDPower = function(value, callback) {
-    if(value) {
-        this.device.call("set_wifi_led", ['on']);
-    } else {
-        this.device.call("set_wifi_led", ['off']);
-    }
-    
-    callback(null);
+    var that = this;
+    that.device.call("set_wifi_led", [value ? "on" : "off"]).then(result => {
+        that.platform.log.debug("[MiOutletPlatform][DEBUG]IntelligencePinboard - SwitchLED - setLEDPower Result: " + result);
+        if(result[0] === "ok") {
+            callback(null);
+        } else {
+            callback(result[0]);
+        }
+    }).catch(function(err) {
+        that.platform.log.error("[MiOutletPlatform][ERROR]IntelligencePinboard - SwitchLED - setLEDPower Error: " + err);
+        callback(err);
+    });
 }
