@@ -95,7 +95,7 @@ PlugBaseOutlet.prototype.setPower = function(value, callback) {
         if(result[0] === "ok") {
             callback(null);
         } else {
-            callback(result[0]);
+            callback(new Error(result[0]));
         }
     }).catch(function(err) {
         that.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - Outlet - setPower Error: " + err);
@@ -183,7 +183,7 @@ PlugBaseSwitchLED.prototype.setLEDPower = function(value, callback) {
         if(result[0] === "ok") {
             callback(null);
         } else {
-            callback(result[0]);
+            callback(new Error(result[0]));
         }
     }).catch(function(err) {
         that.platform.log.error("[MiOutletPlatform][ERROR]PlugBase - SwitchLED - setLEDPower Error: " + err);

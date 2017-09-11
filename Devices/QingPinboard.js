@@ -92,7 +92,7 @@ QingPinboardOutlet.prototype.setPower = function(value, callback) {
         if(result[0] === "ok") {
             callback(null);
         } else {
-            callback(result[0]);
+            callback(new Error(result[0]));
         }
     }).catch(function(err) {
         that.platform.log.error("[MiOutletPlatform][ERROR]QingPinboard - Outlet - setPower Error: " + err);
