@@ -5,7 +5,7 @@ const miio = require('miio');
 
 var Accessory, PlatformAccessory, Service, Characteristic, UUIDGen;
 
-QingPinboardWithUSB = function(platform, config) {
+MiQingPinboard = function(platform, config) {
     this.init(platform, config);
     
     Accessory = platform.Accessory;
@@ -21,10 +21,10 @@ QingPinboardWithUSB = function(platform, config) {
     
     this.accessories = {};
     if(!this.config['outletDisable'] && this.config['outletName'] && this.config['outletName'] != "") {
-        this.accessories['outletAccessory'] = new QingPinboardWithUSBOutlet(this);
+        this.accessories['outletAccessory'] = new MiQingPinboardOutlet(this);
     }
     if(!this.config['temperatureDisable'] && this.config['temperatureName'] && this.config['temperatureName'] != "") {
-        this.accessories['temperatureAccessory'] = new QingPinboardWithUSBTemperature(this);
+        this.accessories['temperatureAccessory'] = new MiQingPinboardTemperature(this);
     }
     var accessoriesArr = this.obj2array(this.accessories);
     
@@ -32,21 +32,21 @@ QingPinboardWithUSB = function(platform, config) {
     
     return accessoriesArr;
 }
-inherits(QingPinboardWithUSB, Base);
+inherits(MiQingPinboard, Base);
 
-QingPinboardWithUSBOutlet = function(dThis) {
+MiQingPinboardOutlet = function(dThis) {
     this.device = dThis.device;
     this.name = dThis.config['outletName'];
     this.platform = dThis.platform;
 }
 
-QingPinboardWithUSBOutlet.prototype.getServices = function() {
+MiQingPinboardOutlet.prototype.getServices = function() {
     var services = [];
 
     var infoService = new Service.AccessoryInformation();
     infoService
         .setCharacteristic(Characteristic.Manufacturer, "XiaoMi")
-        .setCharacteristic(Characteristic.Model, "Qing Pinboard With USB")
+        .setCharacteristic(Characteristic.Model, "Qing Pinboard")
         .setCharacteristic(Characteristic.SerialNumber, "Undefined");
     services.push(infoService);
     
@@ -63,56 +63,56 @@ QingPinboardWithUSBOutlet.prototype.getServices = function() {
     return services;
 }
 
-QingPinboardWithUSBOutlet.prototype.getOutletInUse = function(callback) {
+MiQingPinboardOutlet.prototype.getOutletInUse = function(callback) {
     var that = this;
     this.device.call("get_prop", ["power_consume_rate"]).then(result => {
-        that.platform.log.debug("[MiOutletPlatform][DEBUG]IntelligencePinboard - Outlet - getOutletInUse: " + result);
+        that.platform.log.debug("[MiOutletPlatform][DEBUG]MiQingPinboard - Outlet - getOutletInUse: " + result);
         callback(null, result[0] && result[0] > 0 ? true : false);
     }).catch(function(err) {
-        that.platform.log.error("[MiOutletPlatform][ERROR]IntelligencePinboard - Outlet - getOutletInUse Error: " + err);
+        that.platform.log.error("[MiOutletPlatform][ERROR]MiQingPinboard - Outlet - getOutletInUse Error: " + err);
         callback(err);
     });
 }
 
-QingPinboardWithUSBOutlet.prototype.getPower = function(callback) {
+MiQingPinboardOutlet.prototype.getPower = function(callback) {
     var that = this;
     this.device.call("get_prop", ["power"]).then(result => {
-        that.platform.log.debug("[MiOutletPlatform][DEBUG]QingPinboardWithUSB - Outlet - getPower: " + result);
+        that.platform.log.debug("[MiOutletPlatform][DEBUG]MiQingPinboard - Outlet - getPower: " + result);
         callback(null, result[0] === 'on' ? 1 : 0);
     }).catch(function(err) {
-        that.platform.log.error("[MiOutletPlatform][ERROR]QingPinboardWithUSB - Outlet - getPower Error: " + err);
+        that.platform.log.error("[MiOutletPlatform][ERROR]MiQingPinboard - Outlet - getPower Error: " + err);
         callback(err);
     });
 }
 
-QingPinboardWithUSBOutlet.prototype.setPower = function(value, callback) {
+MiQingPinboardOutlet.prototype.setPower = function(value, callback) {
     var that = this;
     that.device.call("set_power", [value ? "on" : "off"]).then(result => {
-        that.platform.log.debug("[MiOutletPlatform][DEBUG]QingPinboardWithUSB - Outlet - setPower Result: " + result);
+        that.platform.log.debug("[MiOutletPlatform][DEBUG]MiQingPinboard - Outlet - setPower Result: " + result);
         if(result[0] === "ok") {
             callback(null);
         } else {
             callback(new Error(result[0]));
         }
     }).catch(function(err) {
-        that.platform.log.error("[MiOutletPlatform][ERROR]QingPinboardWithUSB - Outlet - setPower Error: " + err);
+        that.platform.log.error("[MiOutletPlatform][ERROR]MiQingPinboard - Outlet - setPower Error: " + err);
         callback(err);
     });
 }
 
-QingPinboardWithUSBTemperature = function(dThis) {
+MiQingPinboardTemperature = function(dThis) {
     this.device = dThis.device;
     this.name = dThis.config['temperatureName'];
     this.platform = dThis.platform;
 }
 
-QingPinboardWithUSBTemperature.prototype.getServices = function() {
+MiQingPinboardTemperature.prototype.getServices = function() {
     var services = [];
 
     var infoService = new Service.AccessoryInformation();
     infoService
         .setCharacteristic(Characteristic.Manufacturer, "XiaoMi")
-        .setCharacteristic(Characteristic.Model, "Qing Pinboard With USB")
+        .setCharacteristic(Characteristic.Model, "Qing Pinboard")
         .setCharacteristic(Characteristic.SerialNumber, "Undefined");
     services.push(infoService);
     
@@ -125,13 +125,13 @@ QingPinboardWithUSBTemperature.prototype.getServices = function() {
     return services;
 }
 
-QingPinboardWithUSBTemperature.prototype.getTemperature = function(callback) {
+MiQingPinboardTemperature.prototype.getTemperature = function(callback) {
     var that = this;
     this.device.call("get_prop", ["temperature"]).then(result => {
-        that.platform.log.debug("[MiOutletPlatform][DEBUG]QingPinboardWithUSB - Temperature - getTemperature: " + result);
+        that.platform.log.debug("[MiOutletPlatform][DEBUG]MiQingPinboard - Temperature - getTemperature: " + result);
         callback(null, result[0]);
     }).catch(function(err) {
-        that.platform.log.error("[MiOutletPlatform][ERROR]QingPinboardWithUSB - Temperature - getTemperature Error: " + err);
+        that.platform.log.error("[MiOutletPlatform][ERROR]MiQingPinboard - Temperature - getTemperature Error: " + err);
         callback(err);
     });
 }

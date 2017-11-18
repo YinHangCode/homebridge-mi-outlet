@@ -1,8 +1,8 @@
-require('./Devices/PlugBase');
-require('./Devices/PlugBaseWithUSB');
-require('./Devices/IntelligencePinboard');
-require('./Devices/QingPinboard');
-require('./Devices/QingPinboardWithUSB');
+require('./Devices/MiPlugBase');
+require('./Devices/MiPlugBaseWithUSB');
+require('./Devices/MiIntelligencePinboard');
+require('./Devices/MiQingPinboard');
+require('./Devices/MiQingPinboardWithUSB');
 
 var fs = require('fs');
 var packageFile = require("./package.json");
@@ -82,24 +82,24 @@ MiOutletPlatform.prototype = {
                     continue;
                 }
                 
-                if (deviceCfg['type'] == "PlugBase") {
-                    new PlugBase(this, deviceCfg).forEach(function(accessory, index, arr){
+                if (deviceCfg['type'] == "MiPlugBase") {
+                    new MiPlugBase(this, deviceCfg).forEach(function(accessory, index, arr){
                         myAccessories.push(accessory);
                     });
-                } else if (deviceCfg['type'] == "PlugBaseWithUSB") {
-                    new PlugBaseWithUSB(this, deviceCfg).forEach(function(accessory, index, arr){
+                } else if (deviceCfg['type'] == "MiPlugBaseWithUSB") {
+                    new MiPlugBaseWithUSB(this, deviceCfg).forEach(function(accessory, index, arr){
                         myAccessories.push(accessory);
                     });
-                } else if (deviceCfg['type'] == "IntelligencePinboard") {
-                    new IntelligencePinboard(this, deviceCfg).forEach(function(accessory, index, arr){
+                } else if (deviceCfg['type'] == "MiIntelligencePinboard") {
+                    new MiIntelligencePinboard(this, deviceCfg).forEach(function(accessory, index, arr){
                         myAccessories.push(accessory);
                     });
-                } else if (deviceCfg['type'] == "QingPinboard") {
-                    new QingPinboard(this, deviceCfg).forEach(function(accessory, index, arr){
+                } else if (deviceCfg['type'] == "MiQingPinboard") {
+                    new MiQingPinboard(this, deviceCfg).forEach(function(accessory, index, arr){
                         myAccessories.push(accessory);
                     });
-                } else if (deviceCfg['type'] == "QingPinboardWithUSB") {
-                    new QingPinboardWithUSB(this, deviceCfg).forEach(function(accessory, index, arr){
+                } else if (deviceCfg['type'] == "MiQingPinboardWithUSB") {
+                    new MiQingPinboardWithUSB(this, deviceCfg).forEach(function(accessory, index, arr){
                         myAccessories.push(accessory);
                     });
                 } else {
