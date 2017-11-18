@@ -14,11 +14,11 @@ Thanks for [nfarina](https://github.com/nfarina)(the author of [homebridge](http
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-outlet/master/images/QingPinboardWithUSB.jpg)
 
 ## Supported Devices
-1.PlugBase(米家智能插座基础版)   
-2.PlugBaseWithUSB(小米智能插座_USB版)   
-3.IntelligencePinboard(米家智能插线板)   
-4.QingPinboard(青米智能插线板_五孔位版)   
-5.QingPinboardWithUSB(青米智能插线板_USB版)   
+1.MiPlugBase(米家智能插座基础版)   
+2.MiPlugBaseWithUSB(小米智能插座_USB版)   
+3.MiIntelligencePinboard(米家智能插线板)   
+4.MiQingPinboard(青米智能插线板_五孔位版)   
+5.MiQingPinboardWithUSB(青米智能插线板_USB版)   
 ## Installation
 1. Install HomeBridge, please follow it's [README](https://github.com/nfarina/homebridge/blob/master/README.md).   
 If you are using Raspberry Pi, please read [Running-HomeBridge-on-a-Raspberry-Pi](https://github.com/nfarina/homebridge/wiki/Running-HomeBridge-on-a-Raspberry-Pi).   
