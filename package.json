@@ -1,12 +1,17 @@
 {
   "name": "homebridge-mi-outlet",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "XiaoMi outlet plugins for HomeBridge(https://github.com/nfarina/homebridge).",
   "keywords": [
-    "homebridge-plugin"
+    "homebridge-plugin",
+    "xiaomi",
+    "mi",
+    "outlet",
+    "plug",
+    "socket"
   ],
   "author": "YinHang",
-  "license": "ISC",
+  "homepage": "https://github.com/YinHangCode/homebridge-mi-outlet",
   "repository": {
     "type": "git",
     "url": "https://github.com/YinHangCode/homebridge-mi-outlet"
@@ -15,7 +20,10 @@
     "url": "https://github.com/YinHangCode/homebridge-mi-outlet/issues"
   },
   "engines": {
-    "node": ">=0.12.0",
+    "node": ">=7.0.0",
     "homebridge": ">=0.4.1"
+  },
+  "dependencies": {
+    "miio": "0.14.1"
   }
 }

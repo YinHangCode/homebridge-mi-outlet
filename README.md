@@ -25,7 +25,7 @@ If you are using Raspberry Pi, please read [Running-HomeBridge-on-a-Raspberry-Pi
 2. Make sure you can see HomeBridge in your iOS devices, if not, please go back to step 1.   
 3. Install packages.   
 ```
-npm install -g miio homebridge-mi-outlet
+npm install -g homebridge-mi-outlet
 ```
 ## Configuration
 ```
@@ -109,6 +109,8 @@ miio --discover --sync
 Wait until you get output.   
 For more information about token, please refer to [OpenMiHome](https://github.com/OpenMiHome/mihome-binary-protocol) and [miio](https://github.com/aholstenson/miio).   
 ## Version Logs
+### 0.2.8 (2018-02-10)
+1.update 'package.json'.   
 ### 0.2.7 (2017-11-18)
 1.modify class name, reduce the probability of conflicts due to the same class name and other plugins.   
 ### 0.2.6 (2017-09-11)
