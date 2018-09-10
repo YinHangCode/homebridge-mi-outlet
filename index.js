@@ -3,6 +3,7 @@ require('./Devices/MiPlugBaseWithUSB');
 require('./Devices/MiIntelligencePinboard');
 require('./Devices/MiQingPinboard');
 require('./Devices/MiQingPinboardWithUSB');
+require('./Devices/MiPlugBaseEnhanced');
 
 var fs = require('fs');
 var packageFile = require("./package.json");
@@ -100,6 +101,10 @@ MiOutletPlatform.prototype = {
                     });
                 } else if (deviceCfg['type'] == "MiQingPinboardWithUSB") {
                     new MiQingPinboardWithUSB(this, deviceCfg).forEach(function(accessory, index, arr){
+                        myAccessories.push(accessory);
+                    });
+                } else if (deviceCfg['type'] == "MiPlugBaseEnhanced") {
+                    new MiPlugBaseEnhanced(this, deviceCfg).forEach(function(accessory, index, arr){
                         myAccessories.push(accessory);
                     });
                 } else {

@@ -12,6 +12,7 @@ Thanks for [nfarina](https://github.com/nfarina)(the author of [homebridge](http
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-outlet/master/images/IntelligencePinboard.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-outlet/master/images/QingPinboard.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-outlet/master/images/QingPinboardWithUSB.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-outlet/master/images/MiPlugBaseEnhanced.jpg)
 
 ## Supported Devices
 1.MiPlugBase(米家智能插座基础版)   
@@ -19,6 +20,8 @@ Thanks for [nfarina](https://github.com/nfarina)(the author of [homebridge](http
 3.MiIntelligencePinboard(米家智能插线板)   
 4.MiQingPinboard(青米智能插线板_五孔位版)   
 5.MiQingPinboardWithUSB(青米智能插线板_USB版)   
+6.MiPlugBaseEnhanced(米家智能插座增强版)   
+
 ## Installation
 1. Install HomeBridge, please follow it's [README](https://github.com/nfarina/homebridge/blob/master/README.md).   
 If you are using Raspberry Pi, please read [Running-HomeBridge-on-a-Raspberry-Pi](https://github.com/nfarina/homebridge/wiki/Running-HomeBridge-on-a-Raspberry-Pi).   
@@ -77,11 +80,23 @@ npm install -g homebridge-mi-outlet
         "outletDisable": false,
         "temperatureName": "kitchen room outlet temperature",
         "temperatureDisable": false
+    }, {
+        "type": "MiPlugBaseEnhanced",
+        "ip": "192.168.88.xx",
+        "token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "outletName": "living room outlet2",
+        "outletDisable": false,
+        "temperatureName": "living room outlet2 temperature",
+        "temperatureDisable": false,
+        "switchUSBName": "living room outlet2 usb switch",
+        "switchUSBDisable": false,
+        "switchLEDName": "living room outlet2 led light switch",
+        "switchLEDDisable": false
     }]
 }]
 ```
 ## Get token
-### Get token by miio2.db
+### Get token by miio2.db (Recommend)
 setup MiJia(MiHome) app in your android device or android virtual machine.   
 open MiJia(MiHome) app and login your account.   
 refresh device list and make sure device display in the device list.   
@@ -109,32 +124,34 @@ miio --discover --sync
 Wait until you get output.   
 For more information about token, please refer to [OpenMiHome](https://github.com/OpenMiHome/mihome-binary-protocol) and [miio](https://github.com/aholstenson/miio).   
 ## Version Logs
+### 0.3.0 (2018-09-10)
+1. add support for Mi PlugBase Enhanced: outlet, temperature sensor, LED switch, USB switch.   
 ### 0.2.8 (2018-02-10)
-1.update 'package.json'.   
+1. update 'package.json'.   
 ### 0.2.7 (2017-11-18)
-1.modify class name, reduce the probability of conflicts due to the same class name and other plugins.   
+1. modify class name, reduce the probability of conflicts due to the same class name and other plugins.   
 ### 0.2.6 (2017-09-11)
-1.optimized code.   
+1. optimized code.   
 ### 0.2.5 (2017-09-05)
-1.optimized code.   
+1. optimized code.   
 ### 0.2.4 (2017-08-31)
-1.add outlet inuse display.    
+1. add outlet inuse display.    
 ### 0.2.3 (2017-08-30)
-1.fixed bug that 'log of undefined' error.    
-2.config item 'accessories' renamed 'deviceCfgs'.   
+1. fixed bug that 'log of undefined' error.    
+2. config item 'accessories' renamed 'deviceCfgs'.   
 ### 0.2.2 (2017-08-29)
-1.fixed bug that many of the same type of device conflict with each other.   
+1. fixed bug that many of the same type of device conflict with each other.   
 ### 0.2.1 (2017-08-27)
-1.optimized code.   
+1. optimized code.   
 ### 0.2.0 (2017-08-26)
-1.add support for Intelligence Pinboard: outlet, temperature sensor, LED switch.   
-2.add support for Qing Pinboard: outlet, temperature sensor.   
-3.add support for Qing Pinboard With USB: outlet, temperature sensor.   
-4.fixed bug that homebridge not works when device is not responding.   
-5.optimized code.   
-6.fixed bug that run homebridge error there is no MiOutletPlatform in config.json file.   
+1. add support for Intelligence Pinboard: outlet, temperature sensor, LED switch.   
+2. add support for Qing Pinboard: outlet, temperature sensor.   
+3. add support for Qing Pinboard With USB: outlet, temperature sensor.   
+4. fixed bug that homebridge not works when device is not responding.   
+5. optimized code.   
+6. fixed bug that run homebridge error there is no MiOutletPlatform in config.json file.   
 ### 0.1.0 (2017-08-25)
-1.add support for PlugBaseWithUSB: outlet, temperature sensor, USB switch.   
-2.add PlugBase LED switch.    
+1. add support for PlugBaseWithUSB: outlet, temperature sensor, USB switch.   
+2. add PlugBase LED switch.    
 ### 0.0.1 (2017-08-24)
-1.support for PlugBase: outlet, temperature sensor.   
+1. support for PlugBase: outlet, temperature sensor.   
