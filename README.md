@@ -43,7 +43,7 @@ npm install -g homebridge-mi-outlet
         "temperatureName": "living room outlet temperature",
         "temperatureDisable": false,
         "switchLEDName": "living room led light switch",
-        "switchLEDDisable": false
+        "switchLEDDisable": true
     }, {
         "type": "MiPlugBaseWithUSB",
         "ip": "192.168.88.xx",
@@ -63,7 +63,7 @@ npm install -g homebridge-mi-outlet
         "temperatureName": "master room outlet temperature",
         "temperatureDisable": false,
         "switchLEDName": "master room led light switch",
-        "switchLEDDisable": false
+        "switchLEDDisable": true
     }, {
         "type": "MiQingPinboard",
         "ip": "192.168.88.xx",
@@ -91,7 +91,7 @@ npm install -g homebridge-mi-outlet
         "switchUSBName": "living room outlet2 usb switch",
         "switchUSBDisable": false,
         "switchLEDName": "living room outlet2 led light switch",
-        "switchLEDDisable": false
+        "switchLEDDisable": true
     }]
 }]
 ```
