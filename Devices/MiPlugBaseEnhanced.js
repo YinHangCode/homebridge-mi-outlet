@@ -194,13 +194,13 @@ MiPlugBaseEnhancedSwitchLED.prototype.setLEDPower = function(value, callback) {
     });
 }
 
-MiPlugBaseEnhancedSwitchLED = function(dThis) {
+MiPlugBaseEnhancedSwitchUSB = function(dThis) {
     this.device = dThis.device;
     this.name = dThis.config['switchUSBName'];
     this.platform = dThis.platform;
 }
 
-MiPlugBaseEnhancedSwitchLED.prototype.getServices = function() {
+MiPlugBaseEnhancedSwitchUSB.prototype.getServices = function() {
     var services = [];
 
     var infoService = new Service.AccessoryInformation();
@@ -220,7 +220,7 @@ MiPlugBaseEnhancedSwitchLED.prototype.getServices = function() {
     return services;
 }
 
-MiPlugBaseEnhancedSwitchLED.prototype.getUSBPower = function(callback) {
+MiPlugBaseEnhancedSwitchUSB.prototype.getUSBPower = function(callback) {
     var that = this;
     this.device.call("get_prop", ["usb_on"]).then(result => {
         that.platform.log.debug("[MiOutletPlatform][DEBUG]MiPlugBaseEnhanced - SwitchUSB - getUSBPower: " + result);
@@ -231,7 +231,7 @@ MiPlugBaseEnhancedSwitchLED.prototype.getUSBPower = function(callback) {
     });
 }
 
-MiPlugBaseEnhancedSwitchLED.prototype.setUSBPower = function(value, callback) {
+MiPlugBaseEnhancedSwitchUSB.prototype.setUSBPower = function(value, callback) {
     var that = this;
     that.device.call(value ? "set_usb_on" : "set_usb_off", []).then(result => {
         that.platform.log.debug("[MiOutletPlatform][DEBUG]MiPlugBaseEnhanced - SwitchUSB - setUSBPower Result: " + result);
