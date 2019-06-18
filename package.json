@@ -1,6 +1,6 @@
 {
-  "name": "homebridge-mi-outlet",
-  "version": "0.3.0",
+  "name": "homebridge-xiaomi-outlet",
+  "version": "0.5.0",
   "description": "XiaoMi outlet plugins for HomeBridge(https://github.com/nfarina/homebridge).",
   "keywords": [
     "homebridge-plugin",
