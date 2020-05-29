@@ -5,6 +5,8 @@ const miio = require('miio');
 
 var Accessory, PlatformAccessory, Service, Characteristic, UUIDGen;
 
+var last_powerstate = false;
+
 MiPlugBase = function(platform, config) {
     this.init(platform, config);
     
@@ -84,7 +86,8 @@ MiPlugBaseOutlet.prototype.getPower = function(callback) {
         callback(null, result[0] === 'on' ? true : false);
     }).catch(function(err) {
         that.platform.log.error("[MiOutletPlatform][ERROR]MiPlugBase - Outlet - getPower Error: " + err);
-        callback(err);
+        //callback(err);
+        callback(null,last_powerstate);
     });
 }
 
@@ -93,6 +96,7 @@ MiPlugBaseOutlet.prototype.setPower = function(value, callback) {
     that.device.call("set_power", [value ? "on" : "off"]).then(result => {
         that.platform.log.debug("[MiOutletPlatform][DEBUG]MiPlugBase - Outlet - setPower Result: " + result);
         if(result[0] === "ok") {
+            last_powerstate = value;
             callback(null);
         } else {
             callback(new Error(result[0]));
