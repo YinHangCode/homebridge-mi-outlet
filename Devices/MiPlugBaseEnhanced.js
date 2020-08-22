@@ -73,7 +73,7 @@ MiPlugBaseEnhancedOutlet.prototype.getOutletInUse = function(callback) {
     var that = this;
     this.device.call("get_prop", ["power"]).then(result => {
         that.platform.log.debug("[MiOutletPlatform][DEBUG]MiPlugBaseEnhanced - Outlet - getOutletInUse: " + result);
-        callback(null, result[0] === '100' ? true : false);
+        callback(null, result[0] === 'on' ? true : false);
     }).catch(function(err) {
         that.platform.log.error("[MiOutletPlatform][ERROR]MiPlugBaseEnhanced - Outlet - getOutletInUse Error: " + err);
         callback(err);
@@ -84,7 +84,7 @@ MiPlugBaseEnhancedOutlet.prototype.getPower = function(callback) {
     var that = this;
     this.device.call("get_prop", ["power"]).then(result => {
         that.platform.log.debug("[MiOutletPlatform][DEBUG]MiPlugBaseEnhanced - Outlet - getPower: " + result);
-        callback(null, result[0] === '100' ? true : false);
+        callback(null, result[0] === 'on' ? true : false);
     }).catch(function(err) {
         that.platform.log.error("[MiOutletPlatform][ERROR]MiPlugBaseEnhanced - Outlet - getPower Error: " + err);
         callback(err);
